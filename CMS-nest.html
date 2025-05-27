@@ -1,0 +1,747 @@
+<html>
+  <head>
+    <title>CMS Nest Filter</title>
+    <style>
+      /* Basic Filter Button Styling */
+      .filter-button {
+        padding: 8px 15px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        background-color: #f0f0f0;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+      }
+
+      /* Active Filter Button Styling */
+      .filter-button.active {
+        background-color: #007bff; /* Or your brand color */
+        color: white;
+        border-color: #007bff;
+      }
+
+      /* Styling for Items Container and Items */
+      #items-container {
+        display: grid;
+        grid-template-columns: repeat(
+          auto-fit,
+          minmax(300px, 1fr)
+        ); /* Adjusted min-width */
+        gap: 20px;
+        margin-top: 30px;
+        padding: 0;
+      }
+
+      .filterable-item {
+        border: 1px solid #eee;
+        padding: 15px; /* Maintain existing padding */
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Softer, larger shadow */
+        transition: opacity 0.3s ease;
+        width: fit-content;
+      }
+
+      /* Style for hidden items */
+      .filterable-item.hidden {
+        display: none;
+      }
+
+      /* Styling for Project Item Images */
+      .filterable-item img {
+        max-width: 100%;
+        height: auto;
+        border-radius: 8px; /* Rounded corners for image */
+        margin-bottom: 10px; /* Space below image */
+      }
+
+      /* Container for Category and Service Tags */
+      .tags-container {
+        display: flex;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        gap: 10px; /* Space between category and service tag groups */
+        margin-bottom: 10px; /* Space below tags */
+      }
+
+      /* Styling for Category Tags Container */
+      .category-tags {
+        display: flex; /* Arrange tags in a row */
+        flex-wrap: wrap; /* Allow tags to wrap */
+        gap: 5px; /* Space between individual tags */
+      }
+
+      /* Styling for Service Tags Container */
+      .service-tags {
+        display: flex; /* Arrange tags in a row */
+        flex-wrap: wrap; /* Allow tags to wrap */
+        gap: 5px; /* Space between individual tags */
+      }
+
+      /* Styling for individual Category and Service Tags */
+      .category-tag {
+        display: inline-block;
+        padding: 4px 8px;
+        margin-right: 5px;
+        border-radius: 12px; /* Pill shape */
+        background-color: #e9e9eb; /* Light grey background */
+        font-size: 0.8em;
+        color: #333;
+      }
+
+      .service-tag {
+        display: inline-block;
+        padding: 4px 8px;
+        margin-right: 5px;
+        border-radius: 12px; /* Pill shape */
+        background-color: #007bff; /* Light grey background */
+        font-size: 0.8em;
+        color: #fff;
+      }
+
+      /* Style for card title and description */
+      .filterable-item h2 {
+        margin-top: 0; /* Remove default top margin */
+        margin-bottom: 5px; /* Space below title */
+        font-size: 1.2em;
+      }
+
+      .filterable-item p {
+        margin-top: 0; /* Remove default top margin */
+        margin-bottom: 10px; /* Space below description */
+        font-size: 1em;
+        line-height: 1.4;
+      }
+
+      /* Styling for Load More Button */
+      #load-more-button {
+        display: block; /* Ensure it's a block element to center */
+        margin: 30px auto; /* Center the button and add top/bottom margin */
+        padding: 10px 20px;
+        border: none;
+        border-radius: 5px;
+        background-color: #007bff; /* Match filter button active color */
+        color: white;
+        font-size: 1em;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+      }
+
+      #load-more-button:hover {
+        background-color: #0056b3; /* Darker shade for hover */
+      }
+
+      /* Styling for the filter button container */
+      #filter-container {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px; /* Space between buttons */
+        margin-bottom: 20px;
+      }
+
+      /* Styling for the area containing filter buttons and the dropdown */
+      #filter-button-area {
+        position: relative; /* Needed for absolute positioning of the dropdown */
+        display: flex; /* Use flex to align the main filter container and the More button */
+        align-items: flex-start; /* Align items to the top */
+        margin-bottom: 20px; /* Space below the filter area */
+        justify-content: space-between;
+      }
+
+      /* Styling for the dropdown container */
+      .more-filters-dropdown {
+        position: absolute;
+        top: calc(100% + 5px);
+        right: 0;
+        background-color: white;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        padding: 10px;
+        z-index: 100;
+        flex-direction: column;
+        gap: 5px;
+        display: none; /* Hide by default */
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Add shadow for better visibility */
+        min-width: 200px; /* Ensure minimum width */
+      }
+
+      /* Style for open dropdown */
+      .open {
+        display: flex;
+      }
+
+      /* Style for the Service Select Button */
+      #service-select-button {
+        padding: 8px 15px;
+        margin: 0;
+        border: 1px solid #ccc;
+        border-radius: 20px; /* Match filter button radius */
+        background-color: #f0f0f0;
+        cursor: pointer;
+        transition: background-color 0.3s ease, border-color 0.3s ease,
+          color 0.3s ease;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        min-width: 150px;
+        color: #333; /* Darker text */
+        font-size: 0.9em; /* Match filter button font size */
+      }
+
+      #service-select-button::after {
+        content: "\2303"; /* Unicode for up arrow */
+        margin-left: 10px;
+        transition: transform 0.3s ease;
+      }
+
+      #service-select-button.open::after {
+        transform: rotate(180deg); /* Rotate arrow when open */
+      }
+
+      /* Styling for buttons inside the dropdown */
+      .more-filters-dropdown .filter-button,
+      .service-dropdown .filter-button {
+        margin: 0;
+      }
+
+      .container {
+        max-width: 1440px;
+        padding: 72px;
+        margin: 0 auto;
+      }
+
+      .category-main-div {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div id="filter-button-area">
+        <div id="filter-container">
+          <!-- Initial 5 buttons (populated by CMS) -->
+          <button class="filter-button" data-filter="all">All</button>
+          <button class="filter-button" data-filter="healthcare">
+            Healthcare
+          </button>
+          <button class="filter-button" data-filter="saas">SaaS</button>
+          <button class="filter-button" data-filter="it">IT</button>
+          <button class="filter-button" data-filter="ai">AI</button>
+          <!-- More initial buttons can be added here if needed -->
+          <div style="position: relative">
+            <button id="more-filters-button" class="filter-button">
+              More...
+            </button>
+
+            <!-- Dropdown for additional buttons -->
+            <div class="more-filters-dropdown">
+              <!-- Additional buttons (populated by CMS) -->
+              <button class="filter-button" data-filter="advertising">
+                Advertising
+              </button>
+              <button class="filter-button" data-filter="consulting">
+                Consulting
+              </button>
+              <button class="filter-button" data-filter="crypto">Crypto</button>
+              <button class="filter-button" data-filter="cybersecurity">
+                Cybersecurity
+              </button>
+              <button class="filter-button" data-filter="engineering">
+                Engineering
+              </button>
+              <button class="filter-button" data-filter="experiences">
+                Experiences
+              </button>
+              <button class="filter-button" data-filter="finance">
+                Finance
+              </button>
+              <button class="filter-button" data-filter="fintech">
+                Fintech
+              </button>
+              <button class="filter-button" data-filter="hr">HR</button>
+              <button class="filter-button" data-filter="insurance">
+                Insurance
+              </button>
+              <button class="filter-button" data-filter="investment-firm">
+                Investment Firm
+              </button>
+              <button class="filter-button" data-filter="news">News</button>
+              <button class="filter-button" data-filter="professional-services">
+                Professional Services
+              </button>
+              <button class="filter-button" data-filter="real-estate">
+                Real Estate
+              </button>
+              <button class="filter-button" data-filter="restaurant">
+                Restaurant Software
+              </button>
+              <button class="filter-button" data-filter="staffing">
+                Staffing
+              </button>
+              <!-- More additional buttons will be added by your CMS -->
+            </div>
+          </div>
+        </div>
+        <!-- Service Filter Dropdown -->
+        <div class="service-filter-area" style="position: relative">
+          <button id="service-select-button" class="filter-button">
+            Services: Select
+          </button>
+          <div class="service-dropdown more-filters-dropdown">
+            <button class="filter-button" data-service="all">
+              All Services
+            </button>
+            <button class="filter-button" data-service="website">
+              Website
+            </button>
+            <button class="filter-button" data-service="product">
+              Product
+            </button>
+            <button class="filter-button" data-service="branding">
+              Branding
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div id="items-container">
+        <div
+          class="filterable-item"
+          data-categories="healthcare,saas"
+          data-services="website"
+        >
+          <img
+            src="https://picsum.photos/300/200?random=1"
+            alt="Healthcare and SaaS Project Image"
+          />
+          <div class="tags-container">
+            <div class="category-tags">
+              <span class="category-tag">Healthcare</span>
+              <span class="category-tag">SaaS</span>
+            </div>
+            <div class="service-tags">
+              <span class="service-tag">Website</span>
+            </div>
+          </div>
+          <h2>Healthcare & SaaS Project</h2>
+          <p>Description for Healthcare and SaaS project.</p>
+        </div>
+        <div
+          class="filterable-item"
+          data-categories="it"
+          data-services="product"
+        >
+          <img
+            src="https://picsum.photos/300/200?random=2"
+            alt="IT Project Image"
+          />
+          <div class="tags-container">
+            <div class="category-tags">
+              <span class="category-tag">IT</span>
+            </div>
+            <div class="service-tags">
+              <span class="service-tag">Product</span>
+            </div>
+          </div>
+          <h2>IT Project</h2>
+          <p>Description for IT project.</p>
+        </div>
+        <div
+          class="filterable-item"
+          data-categories="ai"
+          data-services="branding"
+        >
+          <img
+            src="https://picsum.photos/300/200?random=3"
+            alt="AI Project Image"
+          />
+          <div class="tags-container">
+            <div class="category-tags">
+              <span class="category-tag">AI</span>
+            </div>
+            <div class="service-tags">
+              <span class="service-tag">Branding</span>
+            </div>
+          </div>
+          <h2>AI Project</h2>
+          <p>Description for AI project.</p>
+        </div>
+        <div
+          class="filterable-item"
+          data-categories="advertising"
+          data-services="website,branding"
+        >
+          <img
+            src="https://picsum.photos/300/200?random=4"
+            alt="Advertising Project Image"
+          />
+          <div class="tags-container">
+            <div class="category-tags">
+              <span class="category-tag">Advertising</span>
+            </div>
+            <div class="service-tags">
+              <span class="service-tag">Website</span>
+              <span class="service-tag">Branding</span>
+            </div>
+          </div>
+          <h2>Advertising Project</h2>
+          <p>Description for Advertising project.</p>
+        </div>
+        <div
+          class="filterable-item"
+          data-categories="consulting"
+          data-services="product"
+        >
+          <img
+            src="https://picsum.photos/300/200?random=5"
+            alt="Consulting Project Image"
+          />
+          <div class="tags-container">
+            <div class="category-tags">
+              <span class="category-tag">Consulting</span>
+            </div>
+            <div class="service-tags">
+              <span class="service-tag">Product</span>
+            </div>
+          </div>
+          <h2>Consulting Project</h2>
+          <p>Description for Consulting project.</p>
+        </div>
+        <div
+          class="filterable-item"
+          data-categories="crypto"
+          data-services="website"
+        >
+          <img
+            src="https://picsum.photos/300/200?random=6"
+            alt="Crypto Project Image"
+          />
+          <div class="tags-container">
+            <div class="category-tags">
+              <span class="category-tag">Crypto</span>
+            </div>
+            <div class="service-tags">
+              <span class="service-tag">Website</span>
+            </div>
+          </div>
+          <h2>Crypto Project</h2>
+          <p>Description for Crypto project.</p>
+        </div>
+        <div
+          class="filterable-item"
+          data-categories="cybersecurity"
+          data-services="product,branding"
+        >
+          <img
+            src="https://picsum.photos/300/200?random=7"
+            alt="Cybersecurity Project Image"
+          />
+          <div class="tags-container">
+            <div class="category-tags">
+              <span class="category-tag">Cybersecurity</span>
+            </div>
+            <div class="service-tags">
+              <span class="service-tag">Product</span>
+              <span class="service-tag">Branding</span>
+            </div>
+          </div>
+          <h2>Cybersecurity Project</h2>
+          <p>Description for Cybersecurity project.</p>
+        </div>
+        <div
+          class="filterable-item"
+          data-categories="engineering"
+          data-services="website"
+        >
+          <img
+            src="https://picsum.photos/300/200?random=8"
+            alt="Engineering Project Image"
+          />
+          <div class="tags-container">
+            <div class="category-tags">
+              <span class="category-tag">Engineering</span>
+            </div>
+            <div class="service-tags">
+              <span class="service-tag">Website</span>
+            </div>
+          </div>
+          <h2>Engineering Project</h2>
+          <p>Description for Engineering project.</p>
+        </div>
+        <div
+          class="filterable-item"
+          data-categories="experiences"
+          data-services="branding"
+        >
+          <img
+            src="https://picsum.photos/300/200?random=9"
+            alt="Experiences Project Image"
+          />
+          <div class="tags-container">
+            <div class="category-tags">
+              <span class="category-tag">Experiences</span>
+            </div>
+            <div class="service-tags">
+              <span class="service-tag">Branding</span>
+            </div>
+          </div>
+          <h2>Experiences Project</h2>
+          <p>Description for Experiences project.</p>
+        </div>
+        <div
+          class="filterable-item"
+          data-categories="finance"
+          data-services="website,product"
+        >
+          <img
+            src="https://picsum.photos/300/200?random=10"
+            alt="Finance Project Image"
+          />
+          <div class="tags-container">
+            <div class="category-tags">
+              <span class="category-tag">Finance</span>
+            </div>
+            <div class="service-tags">
+              <span class="service-tag">Website</span>
+              <span class="service-tag">Product</span>
+            </div>
+          </div>
+          <h2>Finance Project</h2>
+          <p>Description for Finance project.</p>
+        </div>
+        <div
+          class="filterable-item"
+          data-categories="fintech"
+          data-services="product"
+        >
+          <img
+            src="https://picsum.photos/300/200?random=11"
+            alt="Fintech Project Image"
+          />
+          <div class="tags-container">
+            <div class="category-tags">
+              <span class="category-tag">Fintech</span>
+            </div>
+            <div class="service-tags">
+              <span class="service-tag">Product</span>
+            </div>
+          </div>
+          <h2>Fintech Project</h2>
+          <p>Description for Fintech project.</p>
+        </div>
+        <div
+          class="filterable-item"
+          data-categories="professional-services"
+          data-services="website,product,branding"
+        >
+          <img
+            src="https://picsum.photos/300/200?random=16"
+            alt="Professional Services Project Image"
+          />
+          <div class="tags-container">
+            <div class="category-tags">
+              <span class="category-tag">Professional Services</span>
+            </div>
+            <div class="service-tags">
+              <span class="service-tag">Website</span>
+              <span class="service-tag">Product</span>
+              <span class="service-tag">Branding</span>
+            </div>
+          </div>
+          <h2>Professional Services Project</h2>
+          <p>Description for Professional Services project.</p>
+        </div>
+        <div
+          class="filterable-item"
+          data-categories="real-estate"
+          data-services="website"
+        >
+          <img
+            src="https://picsum.photos/300/200?random=17"
+            alt="Real Estate Project Image"
+          />
+          <div class="tags-container">
+            <div class="category-tags">
+              <span class="category-tag">Real Estate</span>
+            </div>
+            <div class="service-tags">
+              <span class="service-tag">Website</span>
+            </div>
+          </div>
+          <h2>Real Estate Project</h2>
+          <p>Description for Real Estate project.</p>
+        </div>
+      </div>
+      <div class="empty-state"><p>No item found.</p></div>
+    </div>
+
+    <!-- Load More Button -->
+    <button id="load-more-button" style="display: none">Load More</button>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        const filterButtons = document.querySelectorAll(".filter-button"); // classname of filter tag button
+        const items = document.querySelectorAll(".filterable-item"); // classname of card
+        const moreFiltersButton = document.getElementById(
+          "more-filters-button"
+        ); // class name of more button
+        const moreFiltersDropdown = document.querySelector(
+          ".more-filters-dropdown"
+        ); // class name of more dropdown
+        const loadMoreButton = document.getElementById("load-more-button"); // class name of load more button
+        const emptyBlock = document.querySelector(".empty-state"); // class name of empty state
+        const itemsPerPage = 8;
+        let visibleItems = itemsPerPage;
+
+        // New Service Filter elements
+        const serviceSelectButton = document.getElementById(
+          "service-select-button"
+        );
+        const serviceDropdown = document.querySelector(".service-dropdown"); // class name of service dropdown
+        const serviceFilterButtons =
+          serviceDropdown.querySelectorAll(".filter-button");
+
+        // Set initial state
+        document.querySelector('[data-filter="all"]')?.classList.add("active");
+        // Set initial state for service filter
+        document
+          .querySelector('.service-dropdown [data-service="all"]')
+          ?.classList.add("active");
+        serviceSelectButton.textContent = "Services: All Services";
+
+        // Filter function
+        function filterItems() {
+          const activeCategory =
+            document.querySelector(
+              "#filter-container .filter-button.active, .more-filters-dropdown .filter-button.active"
+            )?.dataset.filter || "all";
+          const activeService =
+            document.querySelector(".service-dropdown .filter-button.active")
+              ?.dataset.service || "all";
+
+          let itemsShownCount = 0;
+          let matchingItems = [];
+
+          items.forEach((item) => {
+            const categories =
+              item.dataset.categories?.split(",").map((cat) => cat.trim()) ||
+              [];
+            const services =
+              item.dataset.services
+                ?.split(",")
+                .map((service) => service.trim()) || [];
+
+            const matchesCategory =
+              activeCategory === "all" || categories.includes(activeCategory);
+            const matchesService =
+              activeService === "all" || services.includes(activeService);
+            const isVisible = matchesCategory && matchesService;
+
+            if (isVisible) matchingItems.push(item);
+          });
+
+          // Hide all items first
+          items.forEach((item) => item.classList.add("hidden"));
+
+          // Show only up to `visibleItems` matching items
+          matchingItems.slice(0, visibleItems).forEach((item) => {
+            item.classList.remove("hidden");
+            itemsShownCount++;
+          });
+
+          // Show or hide empty state
+          if (matchingItems.length === 0) {
+            emptyBlock.style.display = "flex";
+          } else {
+            emptyBlock.style.display = "none";
+          }
+
+          // Update Load More button visibility
+          loadMoreButton.style.display =
+            matchingItems.length > visibleItems ? "block" : "none";
+        }
+
+        // Event Listeners
+        moreFiltersButton.addEventListener("click", (e) => {
+          e.stopPropagation();
+          moreFiltersDropdown.classList.toggle("open"); // Use class to toggle display
+          serviceDropdown.classList.remove("open"); // Close service dropdown when opening more
+        });
+
+        // Toggle Service Dropdown
+        serviceSelectButton.addEventListener("click", (e) => {
+          e.stopPropagation();
+          serviceDropdown.classList.toggle("open"); // Use class to toggle display
+          moreFiltersDropdown.classList.remove("open"); // Close category dropdown when opening service
+        });
+
+        document.addEventListener("click", (e) => {
+          // Close both dropdowns if click is outside both
+          if (
+            !moreFiltersDropdown.contains(e.target) &&
+            e.target !== moreFiltersButton &&
+            !serviceDropdown.contains(e.target) &&
+            e.target !== serviceSelectButton
+          ) {
+            moreFiltersDropdown.classList.remove("open");
+            serviceDropdown.classList.remove("open");
+          }
+        });
+
+        moreFiltersDropdown.addEventListener("click", (e) =>
+          e.stopPropagation()
+        );
+        serviceDropdown.addEventListener("click", (e) => e.stopPropagation());
+
+        // Handle clicks for all filter buttons (both in dropdown and main area)
+        filterButtons.forEach((button) => {
+          button.addEventListener("click", (e) => {
+            // If it's a dropdown toggle button, don't filter, but close other dropdown
+            if (button === moreFiltersButton) {
+              serviceDropdown.classList.remove("open"); // Close service if More is clicked
+              return; // Don't filter on More button click
+            }
+            if (button === serviceSelectButton) {
+              moreFiltersDropdown.classList.remove("open"); // Close more if Service is clicked
+              return; // Don't filter on Service Select button click
+            }
+
+            // Determine if it's a category or service filter button
+            if (button.dataset.filter) {
+              // Category filter clicked
+              moreFiltersDropdown.classList.remove("open"); // Close category dropdown
+              // Update active class for category buttons only
+              document
+                .querySelectorAll(
+                  "#filter-container .filter-button, .more-filters-dropdown .filter-button"
+                )
+                .forEach((btn) => btn.classList.remove("active"));
+              button.classList.add("active");
+            } else if (button.dataset.service) {
+              // Service filter clicked
+              serviceDropdown.classList.remove("open"); // Close service dropdown
+              // Update active class for service buttons only
+              serviceFilterButtons.forEach((btn) =>
+                btn.classList.remove("active")
+              );
+              button.classList.add("active");
+              // Update the text of the service select button
+              serviceSelectButton.textContent = `Services: ${button.textContent}`;
+            }
+
+            // Apply both filters
+            filterItems();
+          });
+        });
+
+        loadMoreButton.addEventListener("click", () => {
+          visibleItems += itemsPerPage;
+          filterItems(); // Re-apply filters with more items visible
+        });
+
+        // Initial display
+        filterItems();
+      });
+    </script>
+  </body>
+</html>

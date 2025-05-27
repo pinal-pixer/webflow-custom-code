@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Only next previous button</title>
+    <style>
+      .tabs-container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 20px;
+      }
+      .tabs {
+        display: flex;
+        gap: 20px;
+      }
+      .tab {
+        padding: 10px 20px;
+        background: #f5f5f5;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+      }
+      .tab.active {
+        background: #007bff;
+        color: white;
+      }
+      .cards-container {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+        gap: 20px;
+      }
+      .collection_wrap {
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        padding: 20px;
+        background: white;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      }
+      .collection_wrap h3 {
+        margin-top: 0;
+        color: #333;
+      }
+      .collection_wrap p {
+        color: #666;
+      }
+
+      /* New Pagination Styles */
+      .article_pagination {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-top: 40px;
+        gap: 20px;
+      }
+
+      .page-counter {
+        color: #333;
+        font-size: 14px;
+        font-weight: 500;
+      }
+
+      .filter-ui_previous,
+      .filter-ui_next {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 8px 16px;
+        border-radius: 20px;
+        background: #f5f5f5;
+        color: #333;
+        text-decoration: none;
+        font-weight: 500;
+        transition: all 0.3s ease;
+        cursor: pointer;
+        border: none;
+      }
+
+      .filter-ui_previous:hover:not(:disabled),
+      .filter-ui_next:hover:not(:disabled) {
+        background: #e0e0e0;
+      }
+
+      .filter-ui_previous:disabled,
+      .filter-ui_next:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+        background: #f5f5f5;
+      }
+      .category-main-container {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 20px;
+        margin-bottom: 30px;
+      }
+      input {
+        border: 1px solid #dcdcdc;
+        padding: 8px 12px;
+        border-radius: 4px;
+      }
+      .button-container {
+        display: flex;
+        align-items: center;
+        gap: 20px;
+      }
+
+      /* Responsive styles */
+      @media (max-width: 768px) {
+        .page-number {
+          width: 35px;
+          height: 35px;
+          font-size: 14px;
+        }
+
+        .filter-ui_previous,
+        .filter-ui_next {
+          padding: 6px 12px;
+          font-size: 14px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="tabs-container">
+      <div class="category-main-container">
+        <div class="tabs">
+          <div class="tab active" data-tab="all">All</div>
+          <div class="tab" data-tab="brand">Brand Growth</div>
+          <div class="tab" data-tab="customer">Customer Experience</div>
+          <div class="tab" data-tab="tech">Tech & Innovation</div>
+          <div class="tab" data-tab="ecommerce">eCommerce Strategy</div>
+        </div>
+        <input placeholder="Enter name" id="searchInput" />
+      </div>
+
+      <div class="cards-container">
+        <!-- Brand Growth Cards -->
+        <div class="collection_wrap" data-category="brand">
+          <h3 data-name="Brand Strategy 101">Brand Strategy 101</h3>
+          <p>
+            Learn the fundamentals of building a strong brand presence in the
+            digital age.
+          </p>
+        </div>
+        <div class="collection_wrap" data-category="brand">
+          <h3 data-name="Social Media Impact">Social Media Impact</h3>
+          <p>
+            How social media platforms can boost your brand visibility and
+            engagement.
+          </p>
+        </div>
+        <div class="collection_wrap" data-category="brand">
+          <h3 data-name="Social Media Impact">Social Media Impact</h3>
+          <p>
+            How social media platforms can boost your brand visibility and
+            engagement.
+          </p>
+        </div>
+        <div class="collection_wrap" data-category="brand">
+          <h3 data-name="Social Media Impact">Social Media Impact</h3>
+          <p>
+            How social media platforms can boost your brand visibility and
+            engagement.
+          </p>
+        </div>
+
+        <!-- Customer Experience Cards -->
+        <div class="collection_wrap" data-category="customer">
+          <h3 data-name="Customer Journey Mapping">Customer Journey Mapping</h3>
+          <p>
+            Understand and optimize every touchpoint in your customer's
+            experience.
+          </p>
+        </div>
+        <div class="collection_wrap" data-category="customer">
+          <h3 data-name="Feedback Analysis">Feedback Analysis</h3>
+          <p>
+            Turn customer feedback into actionable insights for business growth.
+          </p>
+        </div>
+
+        <!-- Tech & Innovation Cards -->
+        <div class="collection_wrap" data-category="tech">
+          <h3 data-name="AI in Business">AI in Business</h3>
+          <p>
+            Explore how artificial intelligence is transforming modern business
+            operations.
+          </p>
+        </div>
+        <div class="collection_wrap" data-category="tech">
+          <h3 data-name="AI in Business">AI in Business</h3>
+          <p>
+            Explore how artificial intelligence is transforming modern business
+            operations.
+          </p>
+        </div>
+        <div class="collection_wrap" data-category="tech">
+          <h3 data-name="AI in Business">AI in Business</h3>
+          <p>
+            Explore how artificial intelligence is transforming modern business
+            operations.
+          </p>
+        </div>
+        <div class="collection_wrap" data-category="tech">
+          <h3 data-name="Digital Transformation">Digital Transformation</h3>
+          <p>
+            Key strategies for successful digital transformation in your
+            organization.
+          </p>
+        </div>
+      </div>
+      <div fs-cmsfilter-element="empty" class="empty_block">
+        <div>No items found.</div>
+      </div>
+      <div class="article_pagination">
+        <div class="page-counter">Page 1 of 1</div>
+        <div class="button-container">
+          <button class="filter-ui_previous">
+            <div>Previous</div>
+          </button>
+          <button class="filter-ui_next">
+            <div>Next</div>
+          </button>
+        </div>
+      </div>
+    </div>
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        const tabs = document.querySelectorAll(".tab");
+        const cards = document.querySelectorAll(".collection_wrap");
+        const paginationWrapper = document.querySelector(".article_pagination");
+        const emptyBlock = document.querySelector(".empty_block");
+        const prevBtn = document.querySelector(".filter-ui_previous");
+        const nextBtn = document.querySelector(".filter-ui_next");
+        const searchInput = document.getElementById("searchInput");
+        const pageCounter = document.querySelector(".page-counter");
+
+        let cardsPerPage = getCardsPerPage();
+        let currentPage = 1;
+        let filteredCards = [...cards];
+        let currentCategory = "all";
+
+        function getCardsPerPage() {
+          return window.innerWidth <= 768 ? 8 : 9;
+        }
+
+        function filterCards(category, searchTerm = "") {
+          filteredCards = [...cards].filter((card) => {
+            const matchesCategory =
+              category === "all" || card.dataset.category === category;
+            const cardTitle = card.querySelector("h3");
+            const matchesSearch =
+              searchTerm === "" ||
+              (cardTitle &&
+                cardTitle.dataset.name
+                  .toLowerCase()
+                  .includes(searchTerm.toLowerCase()));
+            return matchesCategory && matchesSearch;
+          });
+
+          currentPage = 1;
+          showPage(currentPage);
+        }
+
+        function showPage(page) {
+          cardsPerPage = getCardsPerPage();
+          const totalCards = filteredCards.length;
+          const totalPages = Math.ceil(totalCards / cardsPerPage);
+          const start = (page - 1) * cardsPerPage;
+          const end = start + cardsPerPage;
+
+          cards.forEach((card) => (card.style.display = "none"));
+
+          filteredCards.forEach((card, index) => {
+            if (index >= start && index < end) {
+              card.style.display = "block";
+            }
+          });
+
+          paginationWrapper.style.display =
+            totalCards > cardsPerPage ? "flex" : "none";
+          emptyBlock.style.display = totalCards === 0 ? "block" : "none";
+
+          // Update page counter
+          pageCounter.textContent = `Page ${page} of ${totalPages || 1}`;
+
+          // Update button states
+          prevBtn.disabled = page <= 1;
+          nextBtn.disabled = page >= totalPages;
+        }
+
+        tabs.forEach((tab) => {
+          tab.addEventListener("click", () => {
+            tabs.forEach((t) => t.classList.remove("active"));
+            tab.classList.add("active");
+            currentCategory = tab.dataset.tab;
+            filterCards(currentCategory, searchInput.value);
+          });
+        });
+
+        searchInput.addEventListener("input", (e) => {
+          filterCards(currentCategory, e.target.value);
+        });
+
+        prevBtn.addEventListener("click", (e) => {
+          e.preventDefault();
+          if (currentPage > 1) {
+            currentPage--;
+            showPage(currentPage);
+          }
+        });
+
+        nextBtn.addEventListener("click", (e) => {
+          e.preventDefault();
+          const totalPages = Math.ceil(filteredCards.length / cardsPerPage);
+          if (currentPage < totalPages) {
+            currentPage++;
+            showPage(currentPage);
+          }
+        });
+
+        window.addEventListener("resize", () => {
+          showPage(currentPage);
+        });
+
+        showPage(currentPage);
+      });
+    </script>
+  </body>
+</html>

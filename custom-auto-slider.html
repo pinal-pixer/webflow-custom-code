@@ -1,0 +1,558 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Custom Auto Slider</title>
+    <style>
+      /* Reset and Base Styles */
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+          Oxygen, Ubuntu, Cantarell, sans-serif;
+        line-height: 1.6;
+        color: #333;
+      }
+
+      /* Section Styles */
+      .testimonial-section {
+        background-color: #fff;
+        padding: 80px 0;
+      }
+
+      .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 20px;
+        overflow: hidden;
+      }
+
+      /* Header Styles */
+      .section-header {
+        text-align: center;
+        margin-bottom: 60px;
+      }
+
+      .section-tag {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        color: #666;
+        font-size: 14px;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        margin-bottom: 16px;
+      }
+
+      .section-title {
+        font-size: 36px;
+        font-weight: 700;
+        color: #222;
+        margin-bottom: 20px;
+      }
+
+      /* Testimonial Slider Styles */
+      .testimonial-slider {
+        position: relative;
+        overflow: hidden;
+        margin: 0 -20px;
+      }
+
+      .testimonial-track {
+        display: flex;
+        transition: transform 0.5s ease;
+        will-change: transform;
+      }
+
+      .testimonial-slide {
+        min-width: 100%;
+        padding: 0 20px;
+      }
+
+      .testimonial-content {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 40px;
+        align-items: center;
+        background: #f8f9fa;
+        border-radius: 12px;
+        padding: 40px;
+      }
+
+      .testimonial-text {
+        font-size: 24px;
+        line-height: 1.4;
+        color: #444;
+        margin-bottom: 24px;
+      }
+
+      .testimonial-author {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+      }
+
+      .author-name {
+        font-weight: 600;
+        font-size: 18px;
+      }
+
+      .author-title {
+        color: #666;
+        font-size: 14px;
+      }
+
+      .testimonial-image {
+        border-radius: 8px;
+        overflow: hidden;
+      }
+
+      .testimonial-image img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+
+      /* Navigation Buttons */
+      .slider-nav {
+        display: flex;
+        justify-content: center;
+        gap: 16px;
+        margin-top: 40px;
+      }
+
+      .nav-button {
+        background: #fff;
+        border: 2px solid #ddd;
+        border-radius: 50%;
+        width: 40px;
+        height: 40px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition: all 0.3s ease;
+      }
+
+      .nav-button:hover {
+        background: #f0f0f0;
+        border-color: #999;
+      }
+
+      /* Company Logos */
+      .company-logos {
+        width: 100%;
+        overflow-x: hidden;
+        padding: 20px 0;
+        position: relative;
+      }
+
+      .logo-track {
+        gap: 40px;
+        align-items: center;
+        width: max-content;
+        margin: 0 auto;
+        display: flex;
+        transition: transform 0.5s ease;
+        will-change: transform;
+      }
+
+      .company-logo {
+        flex: 0 0 150px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        opacity: 0.5;
+        cursor: pointer;
+        border-bottom: 3px solid transparent;
+        transition: opacity 0.2s, border-color 0.2s;
+      }
+
+      .company-logo.active {
+        opacity: 1;
+        border-bottom: 3px solid #7da6b8;
+      }
+
+      .company-logo img {
+        max-width: 100%;
+        max-height: 100%;
+        object-fit: contain;
+      }
+
+      /* Responsive Styles */
+      @media (max-width: 768px) {
+        .testimonial-content {
+          grid-template-columns: 1fr;
+        }
+
+        .testimonial-text {
+          font-size: 20px;
+        }
+
+        .section-title {
+          font-size: 28px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="testimonial-slider">
+        <div class="testimonial-track">
+          <div class="testimonial-slide">
+            <div class="testimonial-content">
+              <div class="testimonial-left">
+                <p class="testimonial-text">
+                  These robots can also be utilized in crash recovery missions
+                  and relay information on a quicker scale to us and Holloman's
+                  first responders.
+                </p>
+                <div class="testimonial-author">
+                  <span class="author-name">Tech. Sgt.</span>
+                  <span class="author-title"
+                    >49th Security Forces U.S. Air Force</span
+                  >
+                </div>
+                <a
+                  href="https://www.aetc.af.mil/News/Article-Display/Article/3377472/holloman-49th-sfs-unveils-newest-robotic-companions/#:~:text=and%20communications%20noncommissioned%20officer%20in,%E2%80%9D"
+                  target="_blank"
+                  class="full-article-btn"
+                  >Full article</a
+                >
+              </div>
+              <div class="testimonial-image">
+                <img
+                  src="https://cdn.prod.website-files.com/67bd8c9109ade28c797338aa/67e3fe40553319a000df0326_air%20force%20.png"
+                  alt="Air Force"
+                />
+              </div>
+            </div>
+          </div>
+          <div class="testimonial-slide">
+            <div class="testimonial-content">
+              <div class="testimonial-left">
+                <p class="testimonial-text">
+                  We expanded our solution offers to include network-connected
+                  robotic dogs for public safety, defense, and agencies. We do
+                  this in collaboration with a leading provider of robotic dogs,
+                  Ghost Robotics.
+                </p>
+                <div class="testimonial-author">
+                  <span class="author-name">Exec. VP</span>
+                  <span class="author-title">Defense, AT&T</span>
+                </div>
+                <a
+                  href="https://about.att.com/blogs/2023/spencer-robotic-dogs.html#:~:text=recently%20expanded%20our%20solution%20offers,of%20robotic%20dogs%2C%20Ghost%20Robotics"
+                  target="_blank"
+                  class="full-article-btn"
+                  >Full article</a
+                >
+              </div>
+              <div class="testimonial-image">
+                <img
+                  src="https://cdn.prod.website-files.com/67bd8c9109ade28c797338aa/680c173cffa85bb0ffc7ddff_att-ghost-robotics.jpg"
+                  alt="AT&T"
+                />
+              </div>
+            </div>
+          </div>
+          <div class="testimonial-slide">
+            <div class="testimonial-content">
+              <div class="testimonial-left">
+                <p class="testimonial-text">
+                  That's specifically why we think that the robot dog solution
+                  is such a great fit.
+                </p>
+                <div class="testimonial-author">
+                  <span class="author-name">Program Manager</span>
+                  <span class="author-title">S&T, DHS</span>
+                </div>
+                <a
+                  href="https://www.dhs.gov/science-and-technology/news/2022/02/01/feature-article-robot-dogs-take-another-step-towards-deployment#:~:text=The%20challenges%20that%20CBP%20faces,%E2%80%9D"
+                  target="_blank"
+                  class="full-article-btn"
+                  >Full article</a
+                >
+              </div>
+              <div class="testimonial-image">
+                <img
+                  src="https://cdn.prod.website-files.com/67bd8c9109ade28c797338aa/67dbfa4aefae8f024ef6b761_Img-2.png"
+                  alt="DHS"
+                />
+              </div>
+            </div>
+          </div>
+          <div class="testimonial-slide">
+            <div class="testimonial-content">
+              <div class="testimonial-left">
+                <p class="testimonial-text">
+                  The robodog can capture valuable information from atop the
+                  bridge deck and underneath it without putting people in harm's
+                  way.
+                </p>
+                <div class="testimonial-author">
+                  <span class="author-name">Official Statement</span>
+                  <span class="author-title">Ohio Dept. of Transportation</span>
+                </div>
+                <a
+                  href="https://www.uc.edu/news/articles/2024/11/uc-is-working-with-odot-to-deploy-new-robotic-technology.html#:~:text=ODOT%20said%20the%20robodog%20can,remote%20sensing%20technology%20that%20uses"
+                  target="_blank"
+                  class="full-article-btn"
+                  >Full article</a
+                >
+              </div>
+              <div class="testimonial-image">
+                <img
+                  src="https://cdn.prod.website-files.com/67bd8c9109ade28c797338aa/680c180925ffb09ede8d8e42_ohio-department-of-transportation-ghost-robotics.jpg"
+                  alt="Ohio DOT"
+                />
+              </div>
+            </div>
+          </div>
+          <div class="testimonial-slide">
+            <div class="testimonial-content">
+              <div class="testimonial-left">
+                <p class="testimonial-text">
+                  Robot dogs being tested by the Department of Homeland Security
+                  could be used at U.S. borders and by first responders to save
+                  lives, according to the CEO of a leading robotics
+                  manufacturer.
+                </p>
+                <div class="testimonial-author">
+                  <span class="author-name">News Article</span>
+                  <span class="author-title">FEDSCOOP</span>
+                </div>
+                <a
+                  href="https://fedscoop.com/ghost-robotics-ceo-robo-dogs-could-save-lives-at-us-borders/?utm_source=substack&utm_medium=email#:~:text=Robot%20dogs%20being%20tested%20by,of%20a%20leading%20robotics%20manufacturer"
+                  target="_blank"
+                  class="full-article-btn"
+                  >Full article</a
+                >
+              </div>
+              <div class="testimonial-image">
+                <img
+                  src="https://cdn.prod.website-files.com/67bd8c9109ade28c797338aa/680c1855d994508051e645c6_fedscoop-ghost-robotics.jpg"
+                  alt="FEDSCOOP"
+                />
+              </div>
+            </div>
+          </div>
+          <div class="testimonial-slide">
+            <div class="testimonial-content">
+              <div class="testimonial-left">
+                <p class="testimonial-text">
+                  The Ghost Robotics Q-UGVs in particular are designed to bring
+                  a package of electro-optical, acoustic, and other sensors to
+                  bear across any challenging terrain and in the toughest of
+                  environmental conditions...
+                </p>
+                <div class="testimonial-author">
+                  <span class="author-name">News Article</span>
+                  <span class="author-title">Task & Purpose</span>
+                </div>
+                <a
+                  href="https://taskandpurpose.com/"
+                  target="_blank"
+                  class="full-article-btn"
+                  >Full article</a
+                >
+              </div>
+              <div class="testimonial-image">
+                <img
+                  src="https://cdn.prod.website-files.com/67bd8c9109ade28c797338aa/680c1755b7bf3f6aaad91afc_task-and-purpose-ghost-robotics.jpg"
+                  alt="Task & Purpose"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="logo-slider">
+        <div class="logo-track">
+          <div class="company-logo">
+            <img
+              src="https://cdn.prod.website-files.com/67bd8c9109ade28c797338aa/67dbbc47e400d4eb3b41917e_04.png"
+              alt="49th Security Forces U.S. Air Force"
+            />
+          </div>
+          <div class="company-logo">
+            <img
+              src="https://cdn.prod.website-files.com/67bd8c9109ade28c797338aa/67dbbcb4f75acbcb4ac37180_02.png"
+              alt="Defense, AT&T"
+            />
+          </div>
+          <div class="company-logo">
+            <img
+              src="https://cdn.prod.website-files.com/67bd8c9109ade28c797338aa/67dbbcd19d7b9f1af5e886b1_03.png"
+              alt="S&T, DHS"
+            />
+          </div>
+          <div class="company-logo">
+            <img
+              src="https://cdn.prod.website-files.com/67bd8c9109ade28c797338aa/67dbbce4a1ea83e165bd56c3_05.png"
+              alt="Ohio Dept. of Transportation"
+            />
+          </div>
+          <div class="company-logo">
+            <img
+              src="https://cdn.prod.website-files.com/67bd8c9109ade28c797338aa/67dbbcf1186cec74323f4d25_06.png"
+              alt="FEDSCOOP"
+            />
+          </div>
+          <div class="company-logo">
+            <img
+              src="https://cdn.prod.website-files.com/67bd8c9109ade28c797338aa/67dbbd0ee6f402144bd68279_07-1.png"
+              alt="Task & Purpose"
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      const testimonialTrack = document.querySelector(".testimonial-track"); //class name of the container for the testimonial slides
+      const logoTrack = document.querySelector(".logo-track"); //class name of the container for the logo slides
+      const testimonialSlides = Array.from(
+        document.querySelectorAll(".testimonial-slide")
+      ); //class name of the slide
+      const logoSlides = Array.from(document.querySelectorAll(".company-logo")); //class name of the logo slides
+      const slideCount = testimonialSlides.length;
+
+      // Clone slides for infinite loop
+      testimonialSlides.forEach((slide) =>
+        testimonialTrack.appendChild(slide.cloneNode(true))
+      );
+      testimonialSlides
+        .slice()
+        .reverse()
+        .forEach((slide) =>
+          testimonialTrack.insertBefore(
+            slide.cloneNode(true),
+            testimonialTrack.firstChild
+          )
+        );
+
+      logoSlides.forEach((slide) =>
+        logoTrack.appendChild(slide.cloneNode(true))
+      );
+      logoSlides
+        .slice()
+        .reverse()
+        .forEach((slide) =>
+          logoTrack.insertBefore(slide.cloneNode(true), logoTrack.firstChild)
+        );
+
+      const allTestimonialSlides =
+        document.querySelectorAll(".testimonial-slide"); //class name of the slides
+      const allLogoSlides = document.querySelectorAll(".company-logo"); //class name of the logo slides
+
+      const slideWidth = testimonialSlides[0].offsetWidth;
+
+      let index = slideCount;
+      let logoIndex = slideCount;
+
+      // Set initial positions
+      testimonialTrack.style.transform = `translateX(-${slideWidth * index}px)`;
+      centerActiveLogo();
+      updateActiveLogo();
+
+      // Move to next slide
+      function moveNext() {
+        index++;
+        logoIndex++;
+
+        testimonialTrack.style.transition = "transform 0.5s ease";
+        testimonialTrack.style.transform = `translateX(-${
+          slideWidth * index
+        }px)`;
+
+        testimonialTrack.addEventListener("transitionend", onTestimonialEnd, {
+          once: true,
+        });
+
+        logoTrack.style.transition = "transform 0.5s ease";
+        centerActiveLogo();
+        updateActiveLogo();
+      }
+
+      // Update active logo class
+      function updateActiveLogo() {
+        const realIdx = (logoIndex - slideCount + slideCount) % slideCount;
+        logoSlides.forEach((logo, i) => {
+          logo.classList.toggle("active", i === realIdx);
+        });
+      }
+
+      // Center the active logo
+      function centerActiveLogo() {
+        requestAnimationFrame(() => {
+          const activeLogo = allLogoSlides[logoIndex];
+          if (!activeLogo) return;
+
+          const container = logoTrack.parentElement;
+          const containerWidth = container.offsetWidth;
+          const logoCenter = activeLogo.offsetLeft + activeLogo.offsetWidth / 2;
+          const translateX = logoCenter - containerWidth / 2;
+
+          logoTrack.style.transform = `translateX(-${translateX}px)`;
+        });
+      }
+
+      // Reset testimonial slider position to infinite loop start
+      function onTestimonialEnd() {
+        if (index >= allTestimonialSlides.length - slideCount) {
+          testimonialTrack.style.transition = "none";
+          index = slideCount;
+          testimonialTrack.style.transform = `translateX(-${
+            slideWidth * index
+          }px)`;
+        }
+      }
+
+      // Reset logo slider position to infinite loop start
+      logoTrack.addEventListener("transitionend", () => {
+        if (logoIndex >= allLogoSlides.length - slideCount) {
+          logoTrack.style.transition = "none";
+          logoIndex = slideCount;
+          requestAnimationFrame(() => {
+            centerActiveLogo();
+          });
+        }
+      });
+
+      // Logo click handler to jump to clicked logo and testimonial
+      allLogoSlides.forEach((logo, i) => {
+        logo.addEventListener("click", () => {
+          // Calculate actual index with cloned slides offset
+          logoIndex = i;
+          index = logoIndex; // sync testimonial index with logo index
+
+          // Animate testimonial slide
+          testimonialTrack.style.transition = "transform 0.5s ease";
+          testimonialTrack.style.transform = `translateX(-${
+            slideWidth * index
+          }px)`;
+
+          testimonialTrack.addEventListener("transitionend", onTestimonialEnd, {
+            once: true,
+          });
+
+          // Animate and center logo slide
+          logoTrack.style.transition = "transform 0.5s ease";
+          centerActiveLogo();
+
+          updateActiveLogo();
+        });
+      });
+
+      // Auto advance every 4 seconds
+      let interval = setInterval(moveNext, 4000);
+    </script>
+  </body>
+</html>

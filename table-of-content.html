@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Table of Content</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: Arial, sans-serif;
+        line-height: 1.6;
+        padding: 20px;
+        display: flex;
+        gap: 20px;
+        justify-content: space-between;
+        width: 100%;
+      }
+
+      .toc-container {
+        position: sticky;
+        top: 20px;
+        min-width: 20%;
+        max-height: calc(100dvh - 60px);
+        overflow-y: auto;
+        background: #f8f9fa;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      }
+      img {
+        width: 100%;
+      }
+
+      .toc-title {
+        font-size: 1.5em;
+        margin-bottom: 15px;
+        color: #333;
+        border-bottom: 2px solid #007bff;
+        padding-bottom: 10px;
+      }
+
+      .toc-list {
+        list-style: none;
+      }
+
+      .toc-list li {
+        margin: 8px 0;
+      }
+
+      .toc-list a {
+        text-decoration: none;
+        color: #555;
+        display: block;
+        padding: 5px 0;
+        transition: all 0.3s ease;
+      }
+
+      .toc-list a:hover {
+        color: #007bff;
+        transform: translateX(5px);
+      }
+
+      .toc-list .active {
+        color: #007bff;
+        font-weight: bold;
+      }
+
+      .content-main-div {
+        width: 75%;
+      }
+
+      .content h1,
+      .content h2,
+      .content h3 {
+        margin: 20px 0;
+        scroll-margin-top: 20px;
+      }
+
+      .content h1 {
+        font-size: 2em;
+        color: #333;
+      }
+
+      .content h2 {
+        font-size: 1.5em;
+        color: #444;
+        margin-top: 60px;
+        &:first-child {
+          margin-top: 0;
+        }
+      }
+
+      .content h3 {
+        font-size: 1.2em;
+        color: #555;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="toc-container">
+      <div class="toc-title">Table of Contents</div>
+      <ul class="toc-list" id="toc"></ul>
+    </div>
+    <div class="content-main-div">
+      <div class="content">
+        <h2 id="introduction">Introduction</h1>
+        <p>
+          Welcome to our comprehensive guide. This document will walk you
+          through all the essential aspects of our platform, from basic concepts
+          to advanced features. Whether you're a beginner or an experienced
+          user, you'll find valuable information here.
+        </p>
+        <p>
+          Our platform is designed to be intuitive and powerful, offering a wide
+          range of features that can be customized to meet your specific needs.
+          Let's dive in and explore everything it has to offer.
+        </p>
+
+        <h2 id="getting-started">Getting Started</h2>
+        <p>
+          Before you begin using our platform, it's important to understand the
+          basic concepts and requirements. This section will help you get up and
+          running quickly.
+        </p>
+        <p>
+          First, make sure you have all the necessary prerequisites installed on
+          your system. This includes a modern web browser and any required
+          dependencies for your specific use case.
+        </p>
+
+        <h3 id="installation">Installation</h3>
+        <p>Follow these steps to install the software:</p>
+        <ol>
+          <li>Download the latest version from our website</li>
+          <li>Run the installer and follow the on-screen instructions</li>
+          <li>Configure your initial settings</li>
+          <li>Verify the installation by running a test command</li>
+        </ol>
+        <p>
+          If you encounter any issues during installation, please refer to our
+          troubleshooting guide or contact our support team.
+        </p>
+
+        <h2 id="features">Features</h2>
+        <p>
+          Our platform comes packed with powerful features designed to enhance
+          your productivity and streamline your workflow. Let's explore the key
+          features that make our platform stand out.
+        </p>
+
+        <h3 id="feature-1">Advanced Analytics</h3>
+        <p>
+          Our advanced analytics feature provides deep insights into your data:
+        </p>
+        <ul>
+          <li>Real-time data visualization</li>
+          <li>Customizable dashboards</li>
+          <li>Automated reporting</li>
+          <li>Predictive analytics</li>
+        </ul>
+        <p>
+          With these tools at your disposal, you can make data-driven decisions
+          with confidence.
+        </p>
+
+        <h3 id="feature-2">Collaboration Tools</h3>
+        <p>Enhance team productivity with our collaboration features:</p>
+        <ul>
+          <li>Real-time document editing</li>
+          <li>Team chat and video conferencing</li>
+          <li>Task management and assignment</li>
+          <li>File sharing and version control</li>
+        </ul>
+
+        <h2 id="security">Security Features</h2>
+        <p>
+          Security is our top priority. Our platform implements multiple layers
+          of security to protect your data:
+        </p>
+        <ul>
+          <li>End-to-end encryption</li>
+          <li>Two-factor authentication</li>
+          <li>Regular security audits</li>
+          <li>Compliance with industry standards</li>
+        </ul>
+
+        <h3 id="data-protection">Data Protection</h3>
+        <p>We take data protection seriously. Our platform includes:</p>
+        <ul>
+          <li>Automated backups</li>
+          <li>Data encryption at rest and in transit</li>
+          <li>Access control and permissions</li>
+          <li>Audit logging</li>
+        </ul>
+
+        <h2 id="integration">Integration Capabilities</h2>
+        <p>
+          Our platform seamlessly integrates with popular tools and services:
+        </p>
+        <ul>
+          <li>Cloud storage providers</li>
+          <li>Project management tools</li>
+          <li>CRM systems</li>
+          <li>Marketing automation platforms</li>
+        </ul>
+
+        <h3 id="api">API Access</h3>
+        <p>Developers can extend functionality through our robust API:</p>
+        <ul>
+          <li>RESTful API endpoints</li>
+          <li>Comprehensive documentation</li>
+          <li>SDK support for major languages</li>
+          <li>Webhook support</li>
+        </ul>
+
+        <h2 id="performance">Performance Optimization</h2>
+        <p>Learn how to optimize your platform's performance:</p>
+        <ul>
+          <li>Caching strategies</li>
+          <li>Database optimization</li>
+          <li>Load balancing</li>
+          <li>Resource management</li>
+        </ul>
+
+        <h3 id="scaling">Scaling Solutions</h3>
+        <p>Our platform is designed to scale with your needs:</p>
+        <ul>
+          <li>Horizontal scaling</li>
+          <li>Vertical scaling options</li>
+          <li>Auto-scaling capabilities</li>
+          <li>Load distribution</li>
+        </ul>
+
+        <h2 id="support">Support and Resources</h2>
+        <p>We provide comprehensive support to help you succeed:</p>
+        <ul>
+          <li>24/7 technical support</li>
+          <li>Knowledge base and documentation</li>
+          <li>Community forums</li>
+          <li>Training resources</li>
+        </ul>
+
+        <h3 id="training">Training Programs</h3>
+        <p>Access our training resources to master the platform:</p>
+        <ul>
+          <li>Video tutorials</li>
+          <li>Interactive workshops</li>
+          <li>Certification programs</li>
+          <li>Best practices guides</li>
+        </ul>
+
+        <h2 id="pricing">Pricing and Plans</h2>
+        <p>Choose the plan that best fits your needs:</p>
+        <ul>
+          <li>Free tier for individuals</li>
+          <li>Professional plan for small teams</li>
+          <li>Enterprise solutions for large organizations</li>
+          <li>Custom pricing for specific requirements</li>
+        </ul>
+
+        <h2 id="conclusion">Conclusion</h2>
+        <p>
+          We hope this comprehensive guide has provided you with all the
+          information you need to get started with our platform. Remember that
+          our support team is always available to help you with any questions or
+          concerns.
+        </p>
+        <p>
+          Start exploring the features today and discover how our platform can
+          transform your workflow and boost your productivity.
+        </p>
+      </div>
+      <img
+        src="https://cdn.pixabay.com/photo/2015/04/23/22/00/tree-736885_1280.jpg"
+      />
+    </div>
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        const toc = document.getElementById("toc"); // id of item main div
+        const headings = document.querySelectorAll(".content h2"); // class name of main content div
+
+        // Generate table of contents
+        headings.forEach((heading) => {
+          const li = document.createElement("li");
+          const a = document.createElement("a");
+          a.textContent = heading.textContent;
+          a.href = `#${heading.id}`;
+          li.appendChild(a);
+          toc.appendChild(li);
+        });
+
+        // Update active state on scroll
+        window.addEventListener("scroll", () => {
+          const scrollPosition = window.scrollY;
+          
+          headings.forEach((heading) => {
+            const link = document.querySelector(`.toc-list a[href="#${heading.id}"]`);
+            if (scrollPosition >= heading.offsetTop - 100) {
+              document.querySelectorAll(".toc-list a").forEach(a => a.classList.remove("active"));
+              link.classList.add("active");
+            }
+          });
+        });
+
+        // Smooth scrolling on click
+        document.querySelectorAll(".toc-list a").forEach((link) => {
+          link.addEventListener("click", (e) => {
+            e.preventDefault();
+            const targetId = link.getAttribute("href");
+            document.querySelector(targetId).scrollIntoView({ behavior: "smooth" });
+          });
+        });
+      });
+    </script>
+  </body>
+</html>

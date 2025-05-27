@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Custom FAQ section without Accordion</title>
+    <style>
+      .faq-container {
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 20px;
+      }
+
+      .faq-item {
+        border: 1px solid #e0e0e0;
+        border-radius: 8px;
+        margin-bottom: 10px;
+        overflow: hidden;
+      }
+
+      .faq-question {
+        background-color: #b3b4b4;
+        padding: 15px 20px;
+        cursor: pointer;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-weight: 500;
+        transition: background-color 0.3s ease, color 0.3s ease;
+        position: relative;
+      }
+
+      .faq-question:hover {
+        background-color: #828384;
+        color: white;
+      }
+
+      .faq-question::before,
+      .faq-question::after {
+        content: ""; /* Base content, set in specific rules */
+        font-size: 20px;
+        position: absolute;
+        top: 50%;
+        right: 20px;
+        transform: translateY(-50%);
+        transition: opacity 0.3s ease;
+      }
+
+      .faq-question::after {
+        content: "+";
+        opacity: 1;
+      }
+
+      .faq-question::before {
+        content: "-";
+        opacity: 0;
+      }
+
+      .faq-answer {
+        padding: 0 20px;
+        max-height: 0;
+        opacity: 0;
+        visibility: hidden;
+        transition: max-height 0.3s ease, opacity 0.3s ease, padding 0.3s ease;
+        background-color: white;
+      }
+
+      .faq-answer.active {
+        padding: 15px 20px;
+        opacity: 1;
+        visibility: visible;
+      }
+
+      .faq-question.active::after {
+        opacity: 0;
+      }
+
+      .faq-question.active::before {
+        opacity: 1;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="faq-container">
+      <div class="faq-item">
+        <div class="faq-question active">What is Lorem Ipsum?</div>
+        <div class="faq-answer active">
+          Lorem Ipsum is simply dummy text of the printing and typesetting
+          industry. Lorem Ipsum has been the industry's standard dummy text ever
+          since the 1500s.Lorem Ipsum is simply dummy text of the printing and
+          typesetting industry. Lorem Ipsum has been the industry's standard
+          dummy text ever since the 1500s.
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-question">Why do we use it?</div>
+        <div class="faq-answer">
+          It is a long established fact that a reader will be distracted by the
+          readable content of a page when looking at its layout.
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-question">Where does it come from?</div>
+        <div class="faq-answer">
+          Contrary to popular belief, Lorem Ipsum is not simply random text. It
+          has roots in a piece of classical Latin literature from 45 BC.
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-question">Where can I get some?</div>
+        <div class="faq-answer">
+          There are many variations of passages of Lorem Ipsum available, but
+          the majority have suffered alteration in some form.
+        </div>
+      </div>
+    </div>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        const questions = document.querySelectorAll(".faq-question");
+        document.querySelectorAll(".faq-answer").forEach((answer) => {
+          answer.style.maxHeight = "0";
+        });
+
+        // Set initial height for active items on load using requestAnimationFrame
+        requestAnimationFrame(() => {
+          requestAnimationFrame(() => {
+            document
+              .querySelectorAll(".faq-answer.active")
+              .forEach((answer) => {
+                answer.style.maxHeight = "none";
+                const height = answer.scrollHeight;
+                answer.style.maxHeight = height + "px";
+              });
+          });
+        });
+
+        questions.forEach((question) => {
+          question.addEventListener("click", () => {
+            const answer = question.nextElementSibling;
+            const isActive = question.classList.contains("active");
+
+            questions.forEach((q) => {
+              if (q !== question) {
+                q.classList.remove("active");
+                const otherAnswer = q.nextElementSibling;
+                otherAnswer.classList.remove("active");
+                otherAnswer.style.maxHeight = "0";
+              }
+            });
+
+            question.classList.toggle("active");
+            answer.classList.toggle("active");
+
+            if (answer.classList.contains("active")) {
+              answer.style.maxHeight = "none"; // Temporarily remove to get true scrollHeight
+              const height = answer.scrollHeight;
+              answer.style.maxHeight = height + "px"; // Set calculated height
+            } else {
+              answer.style.maxHeight = "0";
+            }
+          });
+        });
+      });
+    </script>
+  </body>
+</html>

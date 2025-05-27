@@ -1,0 +1,452 @@
+<html>
+  <head>
+    <title>Progress Slider with Click</title>
+    <style>
+      /* Basic Reset and Body Styling */
+      body {
+        margin: 0;
+        font-family: sans-serif; /* Or your preferred font */
+      }
+
+      /* Layout and Section Styling */
+      .vision_payload-section {
+        position: relative;
+        overflow: hidden;
+      }
+
+      .background-color-primary {
+        background-color: #1a1a2e; /* Example dark background color */
+      }
+
+      .padding-global {
+        padding-left: 24px;
+        padding-right: 24px;
+        max-width: 1200px;
+        margin: 0 auto;
+      }
+
+      .container-medium {
+        max-width: 960px; /* Example container width */
+        margin-left: auto;
+        margin-right: auto;
+      }
+
+      .text-color-alternate {
+        color: #ffffff; /* Example light text color */
+      }
+
+      .header_top-block {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .hide_desktop {
+        display: none; /* Hide on desktop by default */
+      }
+
+      .button {
+        position: relative;
+        overflow: hidden;
+        display: inline-flex;
+        align-items: center;
+        padding: 12px 24px; /* Example padding */
+        background-color: #007bff; /* Example button color */
+        color: white;
+        text-decoration: none;
+        border-radius: 4px; /* Example border radius */
+      }
+
+      .button_inner {
+        display: flex;
+        align-items: center;
+      }
+
+      .button_arrow {
+        width: 20px; /* Example arrow size */
+        height: 20px;
+        margin-left: 8px; /* Example spacing */
+      }
+
+      .button .absolute {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      /* Payload Block Styling */
+      .payload_block {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 48px; /* Example gap */
+      }
+
+      .payload_image-block {
+        width: 100%;
+        max-width: 81rem;
+        padding-top: 64%;
+        position: relative;
+      }
+
+      .payload_image {
+        background-color: #1a1a2e;
+        transition: all 0.3s;
+        position: absolute;
+        inset: 0%;
+      }
+      .payload_image {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        vertical-align: middle;
+      }
+
+      /* Modular Payload Styling */
+      .modular_payload {
+        justify-content: space-between;
+        align-items: center;
+        display: flex;
+        position: absolute;
+        inset: 0% 0% auto;
+        max-width: 1200px;
+        margin: 0 auto;
+      }
+
+      .payload_left {
+        grid-column-gap: 0.5rem;
+        grid-row-gap: 0.5rem;
+        flex-flow: column;
+        display: flex;
+      }
+
+      .modular_payload-name {
+        font-size: 20px;
+        line-height: 1.75rem;
+        height: 1.75rem;
+        position: relative;
+      }
+
+      .modular_payload-text {
+        background-color: #1a1a2e;
+        font-size: 18px;
+        line-height: 1.75rem;
+        transition: all 0.3s;
+        position: absolute;
+        inset: 0%;
+      }
+
+      .modular_payload-text.active {
+        z-index: 1;
+      }
+
+      .payload_line {
+        background-color: #333;
+        width: 11.125rem;
+        height: 0.125rem;
+        position: relative;
+      }
+
+      .payload_active {
+        background-color: #007bff;
+        width: 0%;
+        height: 0.125rem;
+        transition: all 0.3s;
+        position: absolute;
+        inset: 0% auto 0% 0%;
+      }
+
+      /* Navigation Arrows */
+      .payload_right {
+        display: flex;
+        align-items: center;
+        gap: 16px; /* Example spacing */
+      }
+
+      .payload_prev-arrow,
+      .payload_next-arrow {
+        cursor: pointer;
+        width: 40px; /* Increased size based on image */
+        height: 40px; /* Increased size based on image */
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border: 1px solid rgba(255, 255, 255, 0.6); /* Softer border color */
+        border-radius: 4px; /* Square shape based on image */
+        transition: opacity 0.3s ease-in-out;
+        color: rgba(255, 255, 255, 0.6); /* Softer icon color */
+      }
+
+      .payload_prev-arrow:hover,
+      .payload_next-arrow:hover {
+        border-color: #ffffff; /* White border on hover */
+        color: #ffffff; /* White icon color on hover */
+      }
+
+      .payload_prev-arrow.disabled,
+      .payload_next-arrow.disabled {
+        opacity: 0.3; /* Reduced opacity for disabled */
+        cursor: not-allowed;
+      }
+
+      .flex_icon svg {
+        width: 24px; /* Adjust SVG size if needed */
+        height: 24px;
+      }
+
+      /* Responsive adjustments */
+      @media (max-width: 768px) {
+        .header_top-block {
+          flex-direction: column;
+          align-items: flex-start;
+        }
+
+        .hide_desktop {
+          display: flex; /* Show on mobile */
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <section class="vision_payload-section">
+      <div class="background-color-primary">
+        <div class="padding-global">
+          <div class="container-medium">
+            <div class="text-color-alternate">
+              <div class="payload_block">
+                <div class="payload_image-block">
+                  <img
+                    src="https://cdn.prod.website-files.com/67b418349cd29a4f7829b4a5/680c9b5ad4a3798fc7dc5ad6_Manipular%20Arm.avif"
+                    alt="A large machine that is sitting on a white surface."
+                    sizes="(max-width: 2592px) 100vw, 2592px"
+                    srcset="
+                      https://cdn.prod.website-files.com/67b418349cd29a4f7829b4a5/680c9b5ad4a3798fc7dc5ad6_Manipular%20Arm-p-500.avif   500w,
+                      https://cdn.prod.website-files.com/67b418349cd29a4f7829b4a5/680c9b5ad4a3798fc7dc5ad6_Manipular%20Arm-p-800.avif   800w,
+                      https://cdn.prod.website-files.com/67b418349cd29a4f7829b4a5/680c9b5ad4a3798fc7dc5ad6_Manipular%20Arm-p-1080.avif 1080w,
+                      https://cdn.prod.website-files.com/67b418349cd29a4f7829b4a5/680c9b5ad4a3798fc7dc5ad6_Manipular%20Arm.avif        2592w
+                    "
+                    class="payload_image"
+                    style="opacity: 0"
+                  /><img
+                    src="https://cdn.prod.website-files.com/67b418349cd29a4f7829b4a5/680c9d1d8b6b294be602ec9c_Security%20payload.avif"
+                    alt="A large machine that is sitting on a white surface."
+                    sizes="(max-width: 2592px) 100vw, 2592px"
+                    srcset="
+                      https://cdn.prod.website-files.com/67b418349cd29a4f7829b4a5/680c9d1d8b6b294be602ec9c_Security%20payload-p-500.avif   500w,
+                      https://cdn.prod.website-files.com/67b418349cd29a4f7829b4a5/680c9d1d8b6b294be602ec9c_Security%20payload-p-800.avif   800w,
+                      https://cdn.prod.website-files.com/67b418349cd29a4f7829b4a5/680c9d1d8b6b294be602ec9c_Security%20payload-p-1080.avif 1080w,
+                      https://cdn.prod.website-files.com/67b418349cd29a4f7829b4a5/680c9d1d8b6b294be602ec9c_Security%20payload.avif        2592w
+                    "
+                    class="payload_image"
+                    style="opacity: 1"
+                  /><img
+                    src="https://cdn.prod.website-files.com/67b418349cd29a4f7829b4a5/680c9b5b131f9b477e77164d_CBRN%20Hub.avif"
+                    alt="A large robot that is standing on its legs."
+                    sizes="(max-width: 2592px) 100vw, 2592px"
+                    srcset="
+                      https://cdn.prod.website-files.com/67b418349cd29a4f7829b4a5/680c9b5b131f9b477e77164d_CBRN%20Hub-p-500.avif   500w,
+                      https://cdn.prod.website-files.com/67b418349cd29a4f7829b4a5/680c9b5b131f9b477e77164d_CBRN%20Hub-p-800.avif   800w,
+                      https://cdn.prod.website-files.com/67b418349cd29a4f7829b4a5/680c9b5b131f9b477e77164d_CBRN%20Hub-p-1080.avif 1080w,
+                      https://cdn.prod.website-files.com/67b418349cd29a4f7829b4a5/680c9b5b131f9b477e77164d_CBRN%20Hub.avif        2592w
+                    "
+                    class="payload_image"
+                    style="opacity: 0"
+                  /><img
+                    src="https://cdn.prod.website-files.com/67b418349cd29a4f7829b4a5/680c9b5a6e110628254ccb78_LIDAR.avif"
+                    alt="A large machine that is sitting on a white surface."
+                    sizes="(max-width: 2592px) 100vw, 2592px"
+                    srcset="
+                      https://cdn.prod.website-files.com/67b418349cd29a4f7829b4a5/680c9b5a6e110628254ccb78_LIDAR-p-500.avif   500w,
+                      https://cdn.prod.website-files.com/67b418349cd29a4f7829b4a5/680c9b5a6e110628254ccb78_LIDAR-p-800.avif   800w,
+                      https://cdn.prod.website-files.com/67b418349cd29a4f7829b4a5/680c9b5a6e110628254ccb78_LIDAR-p-1080.avif 1080w,
+                      https://cdn.prod.website-files.com/67b418349cd29a4f7829b4a5/680c9b5a6e110628254ccb78_LIDAR.avif        2592w
+                    "
+                    class="payload_image"
+                    style="opacity: 0"
+                  /><img
+                    src="https://cdn.prod.website-files.com/67b418349cd29a4f7829b4a5/680c9b5a49c720006cfbd261_Low%20Light%20Camera.avif"
+                    alt="A large machine that is sitting on top of a table."
+                    sizes="(max-width: 2592px) 100vw, 2592px"
+                    srcset="
+                      https://cdn.prod.website-files.com/67b418349cd29a4f7829b4a5/680c9b5a49c720006cfbd261_Low%20Light%20Camera-p-500.avif  500w,
+                      https://cdn.prod.website-files.com/67b418349cd29a4f7829b4a5/680c9b5a49c720006cfbd261_Low%20Light%20Camera-p-800.avif  800w,
+                      https://cdn.prod.website-files.com/67b418349cd29a4f7829b4a5/680c9b5a49c720006cfbd261_Low%20Light%20Camera.avif       2592w
+                    "
+                    class="payload_image"
+                    style="opacity: 0"
+                  />
+                </div>
+                <div class="modular_payload">
+                  <div class="payload_left">
+                    <div class="modular_payload-name">
+                      <div class="modular_payload-text" style="z-index: 0">
+                        Manipulator Arm
+                      </div>
+                      <div
+                        class="modular_payload-text active"
+                        style="z-index: 2"
+                      >
+                        Security Payload
+                      </div>
+                      <div class="modular_payload-text" style="z-index: 0">
+                        CBRN Hub
+                      </div>
+                      <div class="modular_payload-text" style="z-index: 0">
+                        LiDAR
+                      </div>
+                      <div class="modular_payload-text" style="z-index: 0">
+                        Low Light Camera
+                      </div>
+                    </div>
+                    <div class="payload_line">
+                      <div
+                        class="payload_active"
+                        style="transition: width 3s linear; width: 100%"
+                      ></div>
+                    </div>
+                  </div>
+                  <div class="payload_right">
+                    <div class="payload_prev-arrow">
+                      <div class="flex_icon w-embed">
+                        <svg
+                          width="24"
+                          height="24"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <path
+                            d="M2.30811 11.7126C2.34611 11.6206 2.40097 11.5377 2.46997 11.4687L9.46997 4.46872C9.61597 4.32272 9.808 4.24875 10 4.24875C10.192 4.24875 10.384 4.32172 10.53 4.46872C10.823 4.76172 10.823 5.23676 10.53 5.52976L4.81006 11.2497L21 11.2497C21.414 11.2497 21.75 11.5857 21.75 11.9997C21.75 12.4137 21.414 12.7497 21 12.7497L4.81104 12.7497L10.531 18.4697C10.824 18.7627 10.824 19.2377 10.531 19.5307C10.238 19.8237 9.76297 19.8237 9.46997 19.5307L2.46997 12.5307C2.40097 12.4617 2.34611 12.3788 2.30811 12.2868C2.23211 12.1028 2.23211 11.8966 2.30811 11.7126Z"
+                            fill="currentColor"
+                          ></path>
+                        </svg>
+                      </div>
+                    </div>
+                    <div class="payload_next-arrow">
+                      <div class="flex_icon w-embed">
+                        <svg
+                          width="24"
+                          height="24"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <path
+                            d="M21.6919 12.2864C21.6539 12.3784 21.599 12.4613 21.53 12.5303L14.53 19.5303C14.384 19.6763 14.192 19.7503 14 19.7503C13.808 19.7503 13.616 19.6773 13.47 19.5303C13.177 19.2373 13.177 18.7623 13.47 18.4693L19.1899 12.7493H3C2.586 12.7493 2.25 12.4133 2.25 11.9993C2.25 11.5853 2.586 11.2493 3 11.2493H19.189L13.469 5.52932C13.176 5.23632 13.176 4.76129 13.469 4.46829C13.762 4.17529 14.237 4.17529 14.53 4.46829L21.53 11.4683C21.599 11.5373 21.6539 11.6202 21.6919 11.7122C21.7679 11.8962 21.7679 12.1024 21.6919 12.2864Z"
+                            fill="currentColor"
+                          ></path>
+                        </svg>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <script>
+      //modular payloads
+      document.addEventListener("DOMContentLoaded", function () {
+        const images = document.querySelectorAll(".payload_image");
+        const titles = document.querySelectorAll(".modular_payload-text");
+        const activeLine = document.querySelector(".payload_active");
+        const nextButton = document.querySelector(".payload_next-arrow");
+        const prevButton = document.querySelector(".payload_prev-arrow");
+
+        let currentIndex = 0;
+        const totalSlides = titles.length;
+        let autoSlideInterval;
+
+        // Reset progress bar to 0% and animate to 100%
+        function animateProgressBar() {
+          if (!activeLine) return;
+
+          // Reset to 0% instantly (no animation)
+          activeLine.style.transition = "none";
+          activeLine.style.width = "0%";
+
+          // Force reflow to apply the reset
+          void activeLine.offsetWidth;
+
+          // Animate to 100% with smooth transition
+          activeLine.style.transition = "width 3s linear"; // Match duration to auto-slide
+          activeLine.style.width = "100%";
+        }
+
+        function updateSlider(index) {
+          currentIndex = index;
+
+          // Update Images
+          images.forEach((img, idx) => {
+            img.style.opacity = idx === index ? "1" : "0";
+          });
+
+          // Update Titles
+          titles.forEach((title, idx) => {
+            title.classList.toggle("active", idx === index);
+            title.style.zIndex = idx === index ? "2" : "0";
+          });
+
+          // Start progress bar animation
+          animateProgressBar();
+
+          // Update arrow states
+          if (prevButton) prevButton.classList.toggle("disabled", index === 0);
+          if (nextButton)
+            nextButton.classList.toggle("disabled", index === totalSlides - 1);
+        }
+
+        function nextSlide() {
+          const nextIndex = (currentIndex + 1) % totalSlides;
+          updateSlider(nextIndex);
+        }
+
+        function prevSlide() {
+          const prevIndex = (currentIndex - 1 + totalSlides) % totalSlides;
+          updateSlider(prevIndex);
+        }
+
+        // Auto-slide functionality
+        function startAutoSlide() {
+          autoSlideInterval = setInterval(nextSlide, 3000); // 3s per slide
+        }
+
+        function resetAutoSlide() {
+          clearInterval(autoSlideInterval);
+          startAutoSlide();
+        }
+
+        // Event listeners
+        if (nextButton)
+          nextButton.addEventListener("click", () => {
+            nextSlide();
+            resetAutoSlide();
+          });
+
+        if (prevButton)
+          prevButton.addEventListener("click", () => {
+            prevSlide();
+            resetAutoSlide();
+          });
+
+        titles.forEach((title, idx) => {
+          title.addEventListener("click", () => {
+            updateSlider(idx);
+            resetAutoSlide();
+          });
+        });
+
+        // Initialize
+        updateSlider(0);
+        startAutoSlide();
+      });
+    </script>
+  </body>
+</html>

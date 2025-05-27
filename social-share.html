@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Blog Social Share</title>
+    <style>
+      .blog-container {
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 20px;
+        font-family: Arial, sans-serif;
+      }
+
+      .blog-content {
+        margin-bottom: 30px;
+      }
+
+      .blog-title {
+        font-size: 2.5em;
+        margin-bottom: 20px;
+        color: #333;
+      }
+
+      .blog-meta {
+        color: #666;
+        margin-bottom: 20px;
+        font-size: 0.9em;
+      }
+
+      .blog-image {
+        width: 100%;
+        max-height: 400px;
+        object-fit: cover;
+        margin-bottom: 20px;
+        border-radius: 8px;
+      }
+
+      .blog-text {
+        line-height: 1.6;
+        color: #444;
+      }
+
+      .social-share-container {
+        display: flex;
+        gap: 15px;
+        margin: 30px 0;
+        padding: 20px;
+        background: #f8f9fa;
+        border-radius: 8px;
+        justify-content: center;
+        flex-wrap: wrap;
+      }
+
+      .social-share-btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        color: white;
+        text-decoration: none;
+        font-family: Arial, sans-serif;
+        transition: all 0.3s ease;
+        cursor: pointer;
+        border: none;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      }
+
+      .social-share-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+      }
+
+      .linkedin {
+        background-color: #0077b5;
+      }
+
+      .facebook {
+        background-color: #4267b2;
+      }
+
+      .instagram {
+        background: linear-gradient(
+          45deg,
+          #f09433 0%,
+          #e6683c 25%,
+          #dc2743 50%,
+          #cc2366 75%,
+          #bc1888 100%
+        );
+      }
+
+      .twitter {
+        background-color: #1da1f2;
+      }
+
+      .telegram {
+        background-color: #0088cc;
+      }
+
+      .copy-link {
+        background-color: #6c757d;
+      }
+
+      .social-share-btn i {
+        font-size: 18px;
+      }
+
+      /* Toast notification styles */
+      .toast {
+        position: fixed;
+        bottom: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        background-color: #333;
+        color: white;
+        padding: 12px 24px;
+        border-radius: 4px;
+        font-size: 14px;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+        z-index: 1000;
+      }
+
+      .toast.show {
+        opacity: 1;
+      }
+    </style>
+    <!-- Font Awesome for icons -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+    />
+  </head>
+  <body>
+    <div class="blog-container">
+      <!-- Sample Blog Content -->
+      <article class="blog-content">
+        <h1 class="blog-title">Your Amazing Blog Title</h1>
+        <div class="blog-meta">
+          <span>By Author Name</span> •
+          <span>Published on March 15, 2024</span> •
+          <span>5 min read</span>
+        </div>
+        <img
+          src="https://images.unsplash.com/photo-1499750310107-5fef28a66643?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&h=400&q=80"
+          alt="Blog Featured Image"
+          class="blog-image"
+        />
+        <div class="blog-text">
+          <p>
+            This is your blog content. Replace this with your actual blog post
+            content. The social sharing buttons below will help readers share
+            your content across various platforms.
+          </p>
+        </div>
+      </article>
+
+      <!-- Social Share Buttons -->
+      <div class="social-share-container">
+        <button
+          class="social-share-btn linkedin"
+          onclick="shareOnLinkedIn()"
+          title="Share on LinkedIn"
+        >
+          <i class="fab fa-linkedin"></i>
+        </button>
+        <button
+          class="social-share-btn facebook"
+          onclick="shareOnFacebook()"
+          title="Share on Facebook"
+        >
+          <i class="fab fa-facebook"></i>
+        </button>
+        <button
+          class="social-share-btn twitter"
+          onclick="shareOnTwitter()"
+          title="Share on Twitter"
+        >
+          <i class="fab fa-twitter"></i>
+        </button>
+        <button
+          class="social-share-btn instagram"
+          onclick="shareOnInstagram()"
+          title="Share on Instagram"
+        >
+          <i class="fab fa-instagram"></i>
+        </button>
+        <button
+          class="social-share-btn telegram"
+          onclick="shareOnTelegram()"
+          title="Share on Telegram"
+        >
+          <i class="fab fa-telegram-plane"></i>
+        </button>
+        <button
+          class="social-share-btn copy-link"
+          onclick="copyLink()"
+          title="Copy Link"
+        >
+          <i class="fas fa-link"></i>
+        </button>
+      </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div class="toast" id="toast">Link copied to clipboard!</div>
+
+    <script>
+      // LinkedIn sharing
+      function shareOnLinkedIn() {
+        if (typeof window !== "undefined") {
+          const currentURL = window.location.href;
+          const linkedinShareURL = `https://www.linkedin.com/sharing/share-offsite/?url=${currentURL}`;
+          window.open(linkedinShareURL, "_blank", "noopener,noreferrer");
+        }
+      }
+
+      // Facebook sharing
+      function shareOnFacebook() {
+        const facebookUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(
+          window.location.href
+        )}`;
+        window.open(facebookUrl, "_blank", "noopener,noreferrer");
+      }
+
+      // Twitter sharing
+      function shareOnTwitter() {
+        const twitterUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(
+          document.title
+        )}&url=${encodeURIComponent(window.location.href)}`;
+        window.open(twitterUrl, "_blank", "noopener,noreferrer");
+      }
+
+      // Instagram sharing
+      function shareOnInstagram() {
+        alert(
+          "To share on Instagram, please take a screenshot of this blog post and share it through the Instagram app."
+        );
+      }
+
+      // Telegram sharing
+      function shareOnTelegram() {
+        const telegramUrl = `https://t.me/share/url?url=${encodeURIComponent(
+          window.location.href
+        )}&text=${encodeURIComponent(document.title)}`;
+        window.open(telegramUrl, "_blank", "noopener,noreferrer");
+      }
+
+      // Copy link functionality
+      function copyLink() {
+        try {
+          navigator.clipboard.writeText(window.location.href).then(() => {
+            showToast();
+          });
+        } catch (err) {
+          // Fallback for older browsers
+          const textArea = document.createElement("textarea");
+          textArea.value = window.location.href;
+          document.body.appendChild(textArea);
+          textArea.select();
+          document.execCommand("copy");
+          document.body.removeChild(textArea);
+          showToast();
+        }
+      }
+
+      // Show toast notification (kept for copy link feedback)
+      function showToast() {
+        const toast = document.getElementById("toast");
+        toast.classList.add("show");
+        setTimeout(() => {
+          toast.classList.remove("show");
+        }, 3000);
+      }
+    </script>
+  </body>
+</html>
