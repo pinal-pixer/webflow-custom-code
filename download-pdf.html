@@ -1,0 +1,20 @@
+<html>
+  <head>
+    <title>Download PDF</title>
+  </head>
+  <body>
+    <div>
+      <button class="button">Download PDF</button>
+    </div>
+    <script>
+      const button = document.querySelector(".button");
+      button.addEventListener("click", () => {
+        const link = document.createElement("a");
+        link.href =
+          "67591fcd895e1d14e7769937_Brands Calendar 2025_Revised (1)_compressed.pdf";
+        link.download = "downloaded.pdf"; // Optional: rename the downloaded file
+        link.click();
+      });
+    </script>
+  </body>
+</html>

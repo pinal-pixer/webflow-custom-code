@@ -1,0 +1,19 @@
+<html>
+  <head>
+    <title>Form Fill After Redirect PDF</title>
+  </head>
+  <body>
+    <form>
+      <input type="text" name="name" required />
+      <button type="submit">Submit</button>
+    </form>
+    <script>
+      const form = document.querySelector("form");
+      form.addEventListener("submit", (e) => {
+        e.preventDefault();
+        window.location.href =
+          "67591fcd895e1d14e7769937_Brands Calendar 2025_Revised (1)_compressed.pdf";
+      });
+    </script>
+  </body>
+</html>

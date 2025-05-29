@@ -1,0 +1,22 @@
+<html>
+  <head>
+    <title>Form Fill After Download PDF</title>
+  </head>
+  <body>
+    <form>
+      <input type="text" name="name" required />
+      <button type="submit">Submit</button>
+    </form>
+    <script>
+      const form = document.querySelector("form");
+      form.addEventListener("submit", (e) => {
+        e.preventDefault();
+        const link = document.createElement("a");
+        link.href =
+          "67591fcd895e1d14e7769937_Brands Calendar 2025_Revised (1)_compressed.pdf";
+        link.download = "downloaded.pdf"; // Optional: rename the downloaded file
+        link.click();
+      });
+    </script>
+  </body>
+</html>
