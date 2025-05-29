@@ -1,0 +1,21 @@
+<html>
+  <head>
+    <title>Number counter</title>
+  </head>
+  <body>
+    <div>
+      <p class="count-number"></p>
+      <button class="button">Click</button>
+    </div>
+    <script>
+      const countNumber = document.querySelector(".count-number");
+      const button = document.querySelector(".button");
+      let count = 0;
+      countNumber.innerText = "Count : 0";
+      button.addEventListener("click", () => {
+        count++;
+        countNumber.innerText = "Count : " + count;
+      });
+    </script>
+  </body>
+</html>
