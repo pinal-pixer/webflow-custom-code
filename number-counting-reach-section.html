@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Number Counting Reach Section</title>
+    <style>
+      .container {
+        text-align: center;
+        margin: 100vh 0; /* Add space to enable scrolling */
+        padding: 50px 0;
+        background: #f8f9fa;
+      }
+      .counter {
+        font-size: 72px;
+        font-weight: bold;
+        color: #2c3e50;
+        transition: opacity 0.8s ease, transform 0.8s ease;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+      }
+      .counter.visible {
+        opacity: 1;
+        transform: translateY(0);
+      }
+      /* Add some dummy content to enable scrolling */
+      .dummy-content {
+        height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: #e9ecef;
+        font-size: 24px;
+        color: #666;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="dummy-content">Scroll down to see the counter</div>
+
+    <div class="container">
+      <div class="counter" id="counter">0</div>
+    </div>
+
+    <script>
+      let currentAnimation = null;
+      let hasAnimated = false;
+
+      function easeOutExpo(t) {
+        return t === 1 ? 1 : 1 - Math.pow(2, -10 * t);
+      }
+
+      function animateCounter() {
+        if (hasAnimated) return;
+
+        if (currentAnimation) {
+          clearInterval(currentAnimation);
+        }
+
+        const counterElement = document.getElementById("counter");
+        const startNumber = 0;
+        const endNumber = 100;
+        const duration = 2000; // 2 seconds
+
+        const frameDuration = 1000 / 60;
+        const totalFrames = Math.round(duration / frameDuration);
+        let frame = 0;
+
+        counterElement.textContent = startNumber;
+
+        currentAnimation = setInterval(() => {
+          frame++;
+          const progress = frame / totalFrames;
+          const easedProgress = easeOutExpo(progress);
+          const currentNumber = Math.floor(
+            startNumber + easedProgress * (endNumber - startNumber)
+          );
+
+          counterElement.textContent = currentNumber;
+
+          if (frame === totalFrames) {
+            clearInterval(currentAnimation);
+            currentAnimation = null;
+            hasAnimated = true;
+          }
+        }, frameDuration);
+      }
+
+      function isElementInViewport(el) {
+        const rect = el.getBoundingClientRect();
+        const windowHeight =
+          window.innerHeight || document.documentElement.clientHeight;
+        return (
+          rect.top >= 0 && rect.top <= windowHeight * 0.75 // Trigger when element is 75% in view
+        );
+      }
+
+      function handleScroll() {
+        const counterElement = document.getElementById("counter");
+        if (isElementInViewport(counterElement)) {
+          counterElement.classList.add("visible");
+          animateCounter();
+        } else {
+          counterElement.classList.remove("visible");
+        }
+      }
+
+      // Add scroll event listener
+      window.addEventListener("scroll", handleScroll);
+
+      // Check on initial load
+      window.addEventListener("load", handleScroll);
+    </script>
+  </body>
+</html>
