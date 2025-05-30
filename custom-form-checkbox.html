@@ -1,0 +1,952 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>User Information Form</title>
+    <style>
+      body {
+        font-family: "Segoe UI", system-ui, -apple-system, sans-serif;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+        margin: 0;
+        background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+      }
+
+      .form-container {
+        background: white;
+        padding: 2rem;
+        border-radius: 12px;
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+        width: 100%;
+        max-width: 500px;
+      }
+
+      .form-title {
+        color: #2d3748;
+        margin-bottom: 1.5rem;
+        font-size: 1.5rem;
+        font-weight: 600;
+        text-align: center;
+      }
+
+      .form-group {
+        margin-bottom: 1.25rem;
+      }
+
+      .form-group label {
+        display: block;
+        color: #4a5568;
+        font-size: 0.875rem;
+        font-weight: 500;
+        margin-bottom: 0.5rem;
+      }
+
+      .form-group input,
+      .form-group select,
+      .form-group textarea {
+        width: 100%;
+        padding: 0.75rem;
+        border: 2px solid #e2e8f0;
+        font-size: 1rem;
+        transition: all 0.2s ease;
+        box-sizing: border-box;
+      }
+
+      .form-group input:focus,
+      .form-group select:focus,
+      .form-group textarea:focus {
+        outline: none;
+      }
+
+      .form-row {
+        display: flex;
+        gap: 1rem;
+        margin-bottom: 1.25rem;
+      }
+
+      .form-row .form-group {
+        flex: 1;
+        margin-bottom: 0;
+      }
+
+      .checkbox-container {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin: 1.5rem 0;
+      }
+
+      .custom-checkbox {
+        position: relative;
+        width: 20px;
+        height: 20px;
+        cursor: pointer;
+      }
+
+      .custom-checkbox input {
+        position: absolute;
+        opacity: 0;
+        cursor: pointer;
+        height: 0;
+        width: 0;
+      }
+
+      .checkmark {
+        position: absolute;
+        top: 0;
+        left: 0;
+        height: 20px;
+        width: 20px;
+        background-color: #fff;
+        border: 2px solid #cbd5e0;
+        border-radius: 4px;
+        transition: all 0.2s ease;
+      }
+
+      .custom-checkbox:hover input ~ .checkmark {
+        border-color: #4299e1;
+      }
+
+      .custom-checkbox input:checked ~ .checkmark {
+        background-color: #4299e1;
+        border-color: #4299e1;
+      }
+
+      .checkmark:after {
+        content: "";
+        position: absolute;
+        display: none;
+      }
+
+      .custom-checkbox input:checked ~ .checkmark:after {
+        display: block;
+      }
+
+      .custom-checkbox .checkmark:after {
+        left: 6px;
+        top: 2px;
+        width: 5px;
+        height: 10px;
+        border: solid white;
+        border-width: 0 2px 2px 0;
+        transform: rotate(45deg);
+      }
+
+      .submit-btn {
+        background: #4299e1;
+        color: white;
+        border: none;
+        padding: 0.75rem 1.5rem;
+        border-radius: 6px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: background 0.2s ease;
+        width: 100%;
+        margin-top: 1rem;
+      }
+
+      .submit-btn:hover {
+        background: #3182ce;
+      }
+
+      .required::after {
+        content: "*";
+        color: #e53e3e;
+        margin-left: 4px;
+      }
+
+      /* Custom Select Styles */
+      .custom-select {
+        position: relative;
+        width: 100%;
+      }
+
+      .custom-select select {
+        appearance: none;
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        width: 100%;
+        padding: 0.75rem;
+        padding-right: 2.5rem;
+        border: 2px solid #e2e8f0;
+        border-radius: 6px;
+        font-size: 1rem;
+        color: #4a5568;
+        background-color: white;
+        cursor: pointer;
+        transition: all 0.2s ease;
+      }
+
+      .custom-select::after {
+        content: "";
+        position: absolute;
+        right: 1rem;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 0;
+        height: 0;
+        border-left: 6px solid transparent;
+        border-right: 6px solid transparent;
+        border-top: 6px solid #4a5568;
+        pointer-events: none;
+        transition: transform 0.2s ease;
+      }
+
+      .custom-select:hover select {
+        border-color: #4299e1;
+      }
+
+      .custom-select select:focus {
+        outline: none;
+        border-color: #4299e1;
+        box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.15);
+      }
+
+      .custom-select select:focus + .custom-select::after {
+        transform: translateY(-50%) rotate(180deg);
+      }
+
+      .custom-select select option {
+        padding: 0.75rem;
+        font-size: 1rem;
+        color: #4a5568;
+        background-color: white;
+      }
+
+      .custom-select select option:hover {
+        background-color: #ebf8ff;
+      }
+
+      /* Add hover states for inputs */
+      .form-group input:hover,
+      .form-group textarea:hover {
+        border-color: #4299e1;
+      }
+
+      /* Add placeholder styling */
+      ::placeholder {
+        color: #a0aec0;
+      }
+
+      /* Add focus styles for all interactive elements */
+      *:focus {
+        outline: none;
+      }
+
+      /* Add transition for smoother interactions */
+      .form-group input,
+      .form-group textarea,
+      .custom-select select,
+      .submit-btn {
+        transition: all 0.2s ease;
+        resize: none;
+      }
+
+      /* Custom Dropdown Styles */
+      .custom-dropdown {
+        position: relative;
+        width: 100%;
+      }
+
+      .dropdown-header {
+        padding: 0.75rem;
+        border: 2px solid #e2e8f0;
+        background-color: white;
+        cursor: pointer;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        transition: all 0.2s ease;
+      }
+
+      .dropdown-header:hover {
+        border-color: #4299e1;
+      }
+
+      .dropdown-header.active {
+        border-color: #4299e1;
+        box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.15);
+      }
+
+      .dropdown-header span {
+        color: #4a5568;
+        font-size: 1rem;
+      }
+
+      .dropdown-header .arrow {
+        width: 12px;
+        height: 12px;
+        border-right: 2px solid #4a5568;
+        border-bottom: 2px solid #4a5568;
+        transform: rotate(45deg);
+        transition: transform 0.2s ease;
+      }
+
+      .dropdown-header.active .arrow {
+        transform: rotate(-135deg);
+      }
+
+      .dropdown-list {
+        position: absolute;
+        top: calc(100% + 4px);
+        left: 0;
+        right: 0;
+        background-color: white;
+        border-radius: 6px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        opacity: 0;
+        visibility: hidden;
+        transform: translateY(-10px);
+        transition: all 0.2s ease;
+        z-index: 1000;
+        max-height: 250px;
+        overflow-y: auto;
+      }
+
+      .dropdown-list.active {
+        opacity: 1;
+        visibility: visible;
+        transform: translateY(0);
+      }
+
+      .dropdown-item {
+        padding: 0.75rem 1rem;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        color: #4a5568;
+      }
+
+      .dropdown-item:hover {
+        background-color: #ebf8ff;
+        color: #4299e1;
+      }
+
+      .dropdown-item.selected {
+        background-color: #ebf8ff;
+        color: #4299e1;
+        font-weight: 500;
+      }
+
+      /* Scrollbar Styling */
+      .dropdown-list::-webkit-scrollbar {
+        width: 6px;
+      }
+
+      .dropdown-list::-webkit-scrollbar-track {
+        background: #f1f1f1;
+        border-radius: 3px;
+      }
+
+      .dropdown-list::-webkit-scrollbar-thumb {
+        background: #cbd5e0;
+        border-radius: 3px;
+      }
+
+      .dropdown-list::-webkit-scrollbar-thumb:hover {
+        background: #a0aec0;
+      }
+
+      /* Multi Select Dropdown Styles */
+      .multi-select-dropdown {
+        position: relative;
+        width: 100%;
+      }
+
+      .multi-select-header {
+        padding: 0.75rem;
+        border: 2px solid #e2e8f0;
+        background-color: white;
+        cursor: pointer;
+        display: flex;
+        justify-content: space-between;
+        position: relative;
+        align-items: center;
+        transition: all 0.2s ease;
+        min-height: 20px;
+      }
+
+      .multi-select-header:hover {
+        border-color: #4299e1;
+      }
+
+      .multi-select-header.active {
+        border-color: #4299e1;
+        box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.15);
+      }
+
+      .selected-items {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 6px;
+        flex: 1;
+        min-height: 24px;
+      }
+
+      .selected-tag {
+        background-color: #ebf8ff;
+        color: #4299e1;
+        padding: 2px 8px;
+        border-radius: 4px;
+        font-size: 0.875rem;
+        display: flex;
+        align-items: center;
+        gap: 4px;
+        margin: 2px 2px 2px 0;
+        border: 1px solid #bee3f8;
+      }
+
+      .selected-tag .remove-tag {
+        cursor: pointer;
+        font-size: 1.2rem;
+        line-height: 1;
+        color: #4299e1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 16px;
+        height: 16px;
+        border-radius: 50%;
+        transition: all 0.2s ease;
+      }
+
+      .selected-tag .remove-tag:hover {
+        background-color: #4299e1;
+        color: white;
+      }
+
+      .multi-select-header .search-input {
+        border: none;
+        outline: none;
+        background: transparent;
+        font-size: 1rem;
+        color: #4a5568;
+        flex: 1;
+        min-width: 120px;
+        padding: 0;
+        margin: 0;
+        display: none;
+      }
+
+      .multi-select-header.active .search-input {
+        display: inline-block;
+      }
+
+      .multi-select-header .search-input::placeholder {
+        color: #a0aec0;
+      }
+
+      .multi-select-header .placeholder {
+        color: #a0aec0;
+        position: absolute;
+        left: 12px;
+        top: 50%;
+        transform: translateY(-50%);
+        pointer-events: none;
+        transition: all 0.2s ease;
+        font-size: 1rem;
+      }
+
+      .multi-select-header.has-values .placeholder,
+      .multi-select-header.active .placeholder {
+        opacity: 0;
+        visibility: hidden;
+      }
+
+      .arrow {
+        position: absolute;
+        right: 12px;
+        /* top: 50%; */
+        transform: translateY(-50%) rotate(45deg);
+        width: 12px;
+        height: 12px;
+        border-right: 2px solid #4a5568;
+        border-bottom: 2px solid #4a5568;
+        transition: transform 0.2s ease;
+        pointer-events: none;
+      }
+
+      .multi-select-header.active .arrow {
+        transform: translateY(-50%) rotate(-135deg);
+      }
+
+      .multi-select-list {
+        position: absolute;
+        top: calc(100% + 4px);
+        left: 0;
+        right: 0;
+        background-color: white;
+        border-radius: 6px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        opacity: 0;
+        visibility: hidden;
+        transform: translateY(-10px);
+        transition: all 0.2s ease;
+        z-index: 1000;
+        max-height: 250px;
+        overflow-y: auto;
+      }
+
+      .multi-select-list.active {
+        opacity: 1;
+        visibility: visible;
+        transform: translateY(0);
+      }
+
+      .multi-select-item {
+        padding: 0.75rem 1rem;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        color: #4a5568;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+
+      .multi-select-item:hover {
+        background-color: #ebf8ff;
+      }
+
+      .multi-select-item.selected {
+        background-color: #ebf8ff;
+        color: #4299e1;
+      }
+
+      .multi-select-item .checkbox {
+        width: 18px;
+        height: 18px;
+        border: 2px solid #cbd5e0;
+        border-radius: 4px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.2s ease;
+      }
+
+      .multi-select-item.selected .checkbox {
+        background-color: #4299e1;
+        border-color: #4299e1;
+      }
+
+      .multi-select-item .checkbox::after {
+        content: "";
+        width: 4px;
+        height: 8px;
+        border: solid white;
+        border-width: 0 2px 2px 0;
+        transform: rotate(45deg);
+        display: none;
+      }
+
+      .multi-select-item.selected .checkbox::after {
+        display: block;
+      }
+      input[type="number"]::-webkit-inner-spin-button,
+      input[type="number"]::-webkit-outer-spin-button {
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        appearance: none;
+        margin: 0;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="form-container">
+      <h2 class="form-title">User Information</h2>
+      <form id="user-info-form">
+        <div class="form-row">
+          <div class="form-group">
+            <label class="required" for="firstName">First Name</label>
+            <input type="text" id="firstName" name="firstName" required />
+          </div>
+          <div class="form-group">
+            <label class="required" for="lastName">Last Name</label>
+            <input type="text" id="lastName" name="lastName" required />
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="required" for="email">Email Address</label>
+          <input type="email" id="email" name="email" required />
+        </div>
+
+        <div class="form-group">
+          <label class="required" for="phone">Phone Number</label>
+          <input type="number" id="phone" name="phone" required />
+        </div>
+
+        <div class="form-group">
+          <label for="address">Address</label>
+          <textarea id="address" name="address" rows="3"></textarea>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="city">City</label>
+            <input type="text" id="city" name="city" />
+          </div>
+          <div class="form-group">
+            <label for="state">State</label>
+            <input type="text" id="state" name="state" />
+          </div>
+          <div class="form-group">
+            <label for="zipCode">ZIP Code</label>
+            <input type="text" id="zipCode" name="zipCode" />
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="country">Country</label>
+          <div class="custom-dropdown">
+            <div class="dropdown-header">
+              <span>Select a country</span>
+              <div class="arrow"></div>
+            </div>
+            <div class="dropdown-list">
+              <div class="dropdown-item" data-value="US">United States</div>
+              <div class="dropdown-item" data-value="CA">Canada</div>
+              <div class="dropdown-item" data-value="UK">United Kingdom</div>
+              <div class="dropdown-item" data-value="AU">Australia</div>
+              <div class="dropdown-item" data-value="DE">Germany</div>
+              <div class="dropdown-item" data-value="FR">France</div>
+              <div class="dropdown-item" data-value="JP">Japan</div>
+              <div class="dropdown-item" data-value="IN">India</div>
+              <div class="dropdown-item" data-value="BR">Brazil</div>
+              <div class="dropdown-item" data-value="MX">Mexico</div>
+            </div>
+            <input type="hidden" id="country" name="country" value="" />
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="interests">Interests</label>
+          <div class="multi-select-dropdown">
+            <div class="multi-select-header">
+              <div class="selected-items"></div>
+              <input
+                type="text"
+                class="search-input"
+                placeholder="Select your interests"
+              />
+              <span class="placeholder">Select your interests</span>
+              <div class="arrow"></div>
+            </div>
+            <div class="multi-select-list">
+              <div class="multi-select-item" data-value="technology">
+                <div class="checkbox"></div>
+                <span>Technology</span>
+              </div>
+              <div class="multi-select-item" data-value="sports">
+                <div class="checkbox"></div>
+                <span>Sports</span>
+              </div>
+              <div class="multi-select-item" data-value="music">
+                <div class="checkbox"></div>
+                <span>Music</span>
+              </div>
+              <div class="multi-select-item" data-value="travel">
+                <div class="checkbox"></div>
+                <span>Travel</span>
+              </div>
+              <div class="multi-select-item" data-value="cooking">
+                <div class="checkbox"></div>
+                <span>Cooking</span>
+              </div>
+              <div class="multi-select-item" data-value="reading">
+                <div class="checkbox"></div>
+                <span>Reading</span>
+              </div>
+              <div class="multi-select-item" data-value="gaming">
+                <div class="checkbox"></div>
+                <span>Gaming</span>
+              </div>
+              <div class="multi-select-item" data-value="photography">
+                <div class="checkbox"></div>
+                <span>Photography</span>
+              </div>
+            </div>
+            <input type="hidden" id="interests" name="interests" value="" />
+          </div>
+        </div>
+
+        <div class="checkbox-container">
+          <label class="custom-checkbox">
+            <input type="checkbox" id="terms" required />
+            <span class="checkmark"></span>
+          </label>
+          <label for="terms">I agree to the terms and conditions</label>
+        </div>
+
+        <div class="checkbox-container">
+          <label class="custom-checkbox">
+            <input type="checkbox" id="newsletter" />
+            <span class="checkmark"></span>
+          </label>
+          <label for="newsletter">Subscribe to newsletter</label>
+        </div>
+
+        <button type="submit" class="submit-btn">Submit</button>
+      </form>
+    </div>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        const dropdowns = document.querySelectorAll(".custom-dropdown");
+
+        dropdowns.forEach((dropdown) => {
+          const header = dropdown.querySelector(".dropdown-header");
+          const list = dropdown.querySelector(".dropdown-list");
+          const items = dropdown.querySelectorAll(".dropdown-item");
+          const input = dropdown.querySelector("input");
+
+          header.addEventListener("click", () => {
+            const isActive = header.classList.contains("active");
+
+            // Close all other dropdowns
+            document
+              .querySelectorAll(".dropdown-header.active")
+              .forEach((activeHeader) => {
+                if (activeHeader !== header) {
+                  activeHeader.classList.remove("active");
+                  activeHeader.nextElementSibling.classList.remove("active");
+                }
+              });
+
+            header.classList.toggle("active");
+            list.classList.toggle("active");
+          });
+
+          items.forEach((item) => {
+            item.addEventListener("click", () => {
+              const value = item.dataset.value;
+              const text = item.textContent;
+
+              // Update selected state
+              items.forEach((i) => i.classList.remove("selected"));
+              item.classList.add("selected");
+
+              // Update header text
+              header.querySelector("span").textContent = text;
+
+              // Update hidden input
+              input.value = value;
+
+              // Close dropdown
+              header.classList.remove("active");
+              list.classList.remove("active");
+            });
+          });
+
+          // Close dropdown when clicking outside
+          document.addEventListener("click", (e) => {
+            if (!dropdown.contains(e.target)) {
+              header.classList.remove("active");
+              list.classList.remove("active");
+            }
+          });
+        });
+      });
+    </script>
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        const multiSelects = document.querySelectorAll(
+          ".multi-select-dropdown"
+        );
+
+        multiSelects.forEach((dropdown) => {
+          const header = dropdown.querySelector(".multi-select-header");
+          const list = dropdown.querySelector(".multi-select-list");
+          const items = dropdown.querySelectorAll(".multi-select-item");
+          const input = dropdown.querySelector('input[type="hidden"]');
+          const searchInput = dropdown.querySelector(".search-input");
+          const selectedItems = dropdown.querySelector(".selected-items");
+          const placeholder = dropdown.querySelector(".placeholder");
+
+          let selectedValues = new Set();
+
+          function updateHeaderState() {
+            if (selectedValues.size > 0) {
+              header.classList.add("has-values");
+            } else {
+              header.classList.remove("has-values");
+            }
+          }
+
+          header.addEventListener("click", (e) => {
+            // Only open if not clicking a remove-tag
+            if (e.target.classList.contains("remove-tag")) return;
+            const isActive = header.classList.contains("active");
+
+            // Close all other dropdowns
+            document
+              .querySelectorAll(".multi-select-header.active")
+              .forEach((activeHeader) => {
+                if (activeHeader !== header) {
+                  activeHeader.classList.remove("active");
+                  activeHeader.nextElementSibling.classList.remove("active");
+                }
+              });
+
+            header.classList.toggle("active");
+            list.classList.toggle("active");
+
+            if (!isActive) {
+              searchInput.style.display = "inline-block";
+              searchInput.focus();
+            } else {
+              searchInput.style.display = "none";
+              searchInput.value = "";
+              items.forEach((item) => (item.style.display = "flex"));
+            }
+          });
+
+          searchInput.addEventListener("click", (e) => {
+            e.stopPropagation();
+            header.classList.add("active");
+            list.classList.add("active");
+          });
+
+          searchInput.addEventListener("input", (e) => {
+            const searchTerm = e.target.value.toLowerCase();
+            items.forEach((item) => {
+              const text = item.querySelector("span").textContent.toLowerCase();
+              item.style.display = text.includes(searchTerm) ? "flex" : "none";
+            });
+          });
+
+          items.forEach((item) => {
+            item.addEventListener("click", () => {
+              const value = item.dataset.value;
+              const text = item.querySelector("span").textContent;
+
+              if (selectedValues.has(value)) {
+                selectedValues.delete(value);
+                item.classList.remove("selected");
+              } else {
+                selectedValues.add(value);
+                item.classList.add("selected");
+              }
+
+              // Update selected items display
+              selectedItems.innerHTML = "";
+              if (selectedValues.size > 0) {
+                selectedValues.forEach((val) => {
+                  const selectedItem = Array.from(items).find(
+                    (item) => item.dataset.value === val
+                  );
+                  const tag = document.createElement("div");
+                  tag.className = "selected-tag";
+                  tag.innerHTML = `
+                    ${selectedItem.querySelector("span").textContent}
+                    <span class="remove-tag" data-value="${val}">&times;</span>
+                  `;
+                  selectedItems.appendChild(tag);
+                });
+              }
+              updateHeaderState();
+              // Update hidden input
+              input.value = Array.from(selectedValues).join(",");
+              searchInput.value = "";
+              // Show/hide placeholder
+              if (
+                selectedValues.size === 0 &&
+                !header.classList.contains("active")
+              ) {
+                placeholder.style.opacity = "1";
+                placeholder.style.visibility = "visible";
+              } else {
+                placeholder.style.opacity = "0";
+                placeholder.style.visibility = "hidden";
+              }
+            });
+          });
+
+          // Handle tag removal
+          selectedItems.addEventListener("click", (e) => {
+            if (e.target.classList.contains("remove-tag")) {
+              const value = e.target.dataset.value;
+              selectedValues.delete(value);
+              const item = Array.from(items).find(
+                (item) => item.dataset.value === value
+              );
+              item.classList.remove("selected");
+              e.target.parentElement.remove();
+              updateHeaderState();
+              input.value = Array.from(selectedValues).join(",");
+              if (
+                selectedValues.size === 0 &&
+                !header.classList.contains("active")
+              ) {
+                placeholder.style.opacity = "1";
+                placeholder.style.visibility = "visible";
+              }
+            }
+          });
+
+          // Close dropdown when clicking outside
+          document.addEventListener("click", (e) => {
+            if (!dropdown.contains(e.target)) {
+              header.classList.remove("active");
+              list.classList.remove("active");
+              searchInput.style.display = "none";
+              searchInput.value = "";
+              items.forEach((item) => (item.style.display = "flex"));
+              // Show placeholder if no values
+              if (selectedValues.size === 0) {
+                placeholder.style.opacity = "1";
+                placeholder.style.visibility = "visible";
+              }
+            }
+          });
+
+          // Initial state
+          searchInput.style.display = "none";
+          updateHeaderState();
+        });
+      });
+    </script>
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        const form = document.getElementById("user-info-form");
+        if (form) {
+          form.addEventListener("submit", function (e) {
+            e.preventDefault();
+            const formData = new FormData(form);
+            const data = {};
+            for (const [key, value] of formData.entries()) {
+              data[key] = value;
+            }
+            console.log("Form submitted! Data:", data);
+            alert("Form submitted! Check the console for submitted data.");
+
+            // Reset the form fields
+            form.reset();
+
+            // Reset custom multi-select dropdowns
+            document
+              .querySelectorAll(".multi-select-dropdown")
+              .forEach((dropdown) => {
+                const header = dropdown.querySelector(".multi-select-header");
+                const list = dropdown.querySelector(".multi-select-list");
+                const items = dropdown.querySelectorAll(".multi-select-item");
+                const input = dropdown.querySelector('input[type="hidden"]');
+                const selectedItems = dropdown.querySelector(".selected-items");
+                const placeholder = dropdown.querySelector(".placeholder");
+                // Clear selected values
+                items.forEach((item) => item.classList.remove("selected"));
+                selectedItems.innerHTML =
+                  '<span class="placeholder">Select your interests</span>';
+                input.value = "";
+                header.classList.remove("has-values");
+                header.classList.remove("active");
+                list.classList.remove("active");
+                placeholder.style.opacity = "1";
+                placeholder.style.visibility = "visible";
+              });
+          });
+        }
+      });
+    </script>
+  </body>
+</html>
