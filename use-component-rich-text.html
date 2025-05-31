@@ -1,0 +1,89 @@
+<html>
+  <head>
+    <title>Use component in rich text</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 20px;
+        background-color: #f4f4f4;
+      }
+      h1 {
+        color: #333;
+      }
+      p {
+        font-size: 16px;
+        line-height: 1.5;
+        color: #555;
+      }
+      .cta {
+        background-color: #007bff;
+        color: white;
+        padding: 20px;
+        border-radius: 5px;
+        margin-top: 20px;
+      }
+      .cta h2 {
+        margin: 0 0 10px;
+      }
+      .cta button {
+        background-color: #28a745;
+        color: white;
+        border: none;
+        padding: 10px 15px;
+        border-radius: 5px;
+        cursor: pointer;
+      }
+      .cta button:hover {
+        background-color: #218838;
+      }
+    </style>
+  </head>
+  <body>
+    <h1 id="page-title">Welcome to Rich Text Example</h1>
+    <div id="rich-text-content"></div>
+
+    <!-- CTA Component -->
+    <div class="cta" id="cta-section">
+      <h2 id="cta-title">Join Us Now!</h2>
+      <p id="cta-description">Sign up today to get started.</p>
+      <button id="cta-button">Sign Up</button>
+    </div>
+
+    <script>
+      // Simulated fetch from CMS
+      const fetchDataFromCMS = async () => {
+        // Simulate fetching data
+        return {
+          title: "Welcome to Rich Text Example",
+          content: "<p>This is an example of rich text content.</p>",
+          cta: {
+            title: "Join Us Now!",
+            description: "Sign up today to get started.",
+            link: "https://example.com/signup",
+          },
+        };
+      };
+
+      const renderData = async () => {
+        const data = await fetchDataFromCMS();
+
+        // Set page title
+        document.getElementById("page-title").innerText = data.title;
+
+        // Set rich text content
+        document.getElementById("rich-text-content").innerHTML = data.content;
+
+        // Set CTA data
+        document.getElementById("cta-title").innerText = data.cta.title;
+        document.getElementById("cta-description").innerText =
+          data.cta.description;
+        document.getElementById("cta-button").onclick = () => {
+          window.location.href = data.cta.link;
+        };
+      };
+
+      // Call the render function
+      renderData();
+    </script>
+  </body>
+</html>
