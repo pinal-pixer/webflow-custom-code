@@ -623,12 +623,6 @@
           <div class="multi-select-dropdown">
             <div class="multi-select-header">
               <div class="selected-items"></div>
-              <input
-                type="text"
-                class="search-input"
-                placeholder="Select your interests"
-              />
-              <span class="placeholder">Select your interests</span>
               <div class="arrow"></div>
             </div>
             <div class="multi-select-list">
@@ -691,8 +685,8 @@
 
     <script>
       document.addEventListener("DOMContentLoaded", function () {
+        // Handle regular dropdown
         const dropdowns = document.querySelectorAll(".custom-dropdown");
-
         dropdowns.forEach((dropdown) => {
           const header = dropdown.querySelector(".dropdown-header");
           const list = dropdown.querySelector(".dropdown-list");
@@ -700,38 +694,14 @@
           const input = dropdown.querySelector("input");
 
           header.addEventListener("click", () => {
-            const isActive = header.classList.contains("active");
-
-            // Close all other dropdowns
-            document
-              .querySelectorAll(".dropdown-header.active")
-              .forEach((activeHeader) => {
-                if (activeHeader !== header) {
-                  activeHeader.classList.remove("active");
-                  activeHeader.nextElementSibling.classList.remove("active");
-                }
-              });
-
             header.classList.toggle("active");
             list.classList.toggle("active");
           });
 
           items.forEach((item) => {
             item.addEventListener("click", () => {
-              const value = item.dataset.value;
-              const text = item.textContent;
-
-              // Update selected state
-              items.forEach((i) => i.classList.remove("selected"));
-              item.classList.add("selected");
-
-              // Update header text
-              header.querySelector("span").textContent = text;
-
-              // Update hidden input
-              input.value = value;
-
-              // Close dropdown
+              header.querySelector("span").textContent = item.textContent;
+              input.value = item.dataset.value;
               header.classList.remove("active");
               list.classList.remove("active");
             });
@@ -748,70 +718,23 @@
       });
     </script>
     <script>
+      // Handle multi-select dropdown
       document.addEventListener("DOMContentLoaded", function () {
         const multiSelects = document.querySelectorAll(
           ".multi-select-dropdown"
         );
-
         multiSelects.forEach((dropdown) => {
           const header = dropdown.querySelector(".multi-select-header");
           const list = dropdown.querySelector(".multi-select-list");
           const items = dropdown.querySelectorAll(".multi-select-item");
           const input = dropdown.querySelector('input[type="hidden"]');
-          const searchInput = dropdown.querySelector(".search-input");
           const selectedItems = dropdown.querySelector(".selected-items");
           const placeholder = dropdown.querySelector(".placeholder");
-
           let selectedValues = new Set();
 
-          function updateHeaderState() {
-            if (selectedValues.size > 0) {
-              header.classList.add("has-values");
-            } else {
-              header.classList.remove("has-values");
-            }
-          }
-
-          header.addEventListener("click", (e) => {
-            // Only open if not clicking a remove-tag
-            if (e.target.classList.contains("remove-tag")) return;
-            const isActive = header.classList.contains("active");
-
-            // Close all other dropdowns
-            document
-              .querySelectorAll(".multi-select-header.active")
-              .forEach((activeHeader) => {
-                if (activeHeader !== header) {
-                  activeHeader.classList.remove("active");
-                  activeHeader.nextElementSibling.classList.remove("active");
-                }
-              });
-
+          header.addEventListener("click", () => {
             header.classList.toggle("active");
             list.classList.toggle("active");
-
-            if (!isActive) {
-              searchInput.style.display = "inline-block";
-              searchInput.focus();
-            } else {
-              searchInput.style.display = "none";
-              searchInput.value = "";
-              items.forEach((item) => (item.style.display = "flex"));
-            }
-          });
-
-          searchInput.addEventListener("click", (e) => {
-            e.stopPropagation();
-            header.classList.add("active");
-            list.classList.add("active");
-          });
-
-          searchInput.addEventListener("input", (e) => {
-            const searchTerm = e.target.value.toLowerCase();
-            items.forEach((item) => {
-              const text = item.querySelector("span").textContent.toLowerCase();
-              item.style.display = text.includes(searchTerm) ? "flex" : "none";
-            });
           });
 
           items.forEach((item) => {
@@ -827,41 +750,24 @@
                 item.classList.add("selected");
               }
 
-              // Update selected items display
               selectedItems.innerHTML = "";
-              if (selectedValues.size > 0) {
-                selectedValues.forEach((val) => {
-                  const selectedItem = Array.from(items).find(
-                    (item) => item.dataset.value === val
-                  );
-                  const tag = document.createElement("div");
-                  tag.className = "selected-tag";
-                  tag.innerHTML = `
-                    ${selectedItem.querySelector("span").textContent}
-                    <span class="remove-tag" data-value="${val}">&times;</span>
-                  `;
-                  selectedItems.appendChild(tag);
-                });
-              }
-              updateHeaderState();
-              // Update hidden input
+              selectedValues.forEach((val) => {
+                const selectedItem = Array.from(items).find(
+                  (item) => item.dataset.value === val
+                );
+                const tag = document.createElement("div");
+                tag.className = "selected-tag";
+                tag.innerHTML = `
+                  ${selectedItem.querySelector("span").textContent}
+                  <span class="remove-tag" data-value="${val}">&times;</span>
+                `;
+                selectedItems.appendChild(tag);
+              });
+
               input.value = Array.from(selectedValues).join(",");
-              searchInput.value = "";
-              // Show/hide placeholder
-              if (
-                selectedValues.size === 0 &&
-                !header.classList.contains("active")
-              ) {
-                placeholder.style.opacity = "1";
-                placeholder.style.visibility = "visible";
-              } else {
-                placeholder.style.opacity = "0";
-                placeholder.style.visibility = "hidden";
-              }
             });
           });
 
-          // Handle tag removal
           selectedItems.addEventListener("click", (e) => {
             if (e.target.classList.contains("remove-tag")) {
               const value = e.target.dataset.value;
@@ -871,15 +777,7 @@
               );
               item.classList.remove("selected");
               e.target.parentElement.remove();
-              updateHeaderState();
               input.value = Array.from(selectedValues).join(",");
-              if (
-                selectedValues.size === 0 &&
-                !header.classList.contains("active")
-              ) {
-                placeholder.style.opacity = "1";
-                placeholder.style.visibility = "visible";
-              }
             }
           });
 
@@ -888,24 +786,13 @@
             if (!dropdown.contains(e.target)) {
               header.classList.remove("active");
               list.classList.remove("active");
-              searchInput.style.display = "none";
-              searchInput.value = "";
-              items.forEach((item) => (item.style.display = "flex"));
-              // Show placeholder if no values
-              if (selectedValues.size === 0) {
-                placeholder.style.opacity = "1";
-                placeholder.style.visibility = "visible";
-              }
             }
           });
-
-          // Initial state
-          searchInput.style.display = "none";
-          updateHeaderState();
         });
       });
     </script>
     <script>
+      // Handle form submission
       document.addEventListener("DOMContentLoaded", function () {
         const form = document.getElementById("user-info-form");
         if (form) {
@@ -918,31 +805,7 @@
             }
             console.log("Form submitted! Data:", data);
             alert("Form submitted! Check the console for submitted data.");
-
-            // Reset the form fields
             form.reset();
-
-            // Reset custom multi-select dropdowns
-            document
-              .querySelectorAll(".multi-select-dropdown")
-              .forEach((dropdown) => {
-                const header = dropdown.querySelector(".multi-select-header");
-                const list = dropdown.querySelector(".multi-select-list");
-                const items = dropdown.querySelectorAll(".multi-select-item");
-                const input = dropdown.querySelector('input[type="hidden"]');
-                const selectedItems = dropdown.querySelector(".selected-items");
-                const placeholder = dropdown.querySelector(".placeholder");
-                // Clear selected values
-                items.forEach((item) => item.classList.remove("selected"));
-                selectedItems.innerHTML =
-                  '<span class="placeholder">Select your interests</span>';
-                input.value = "";
-                header.classList.remove("has-values");
-                header.classList.remove("active");
-                list.classList.remove("active");
-                placeholder.style.opacity = "1";
-                placeholder.style.visibility = "visible";
-              });
           });
         }
       });
