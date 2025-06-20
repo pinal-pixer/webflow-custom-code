@@ -11,7 +11,7 @@ document.addEventListener("DOMContentLoaded", function () {
   let filteredCards = [...cards];
 
   function getCardsPerPage() {
-    return window.innerWidth <= 768 ? 4 : 6;
+    return window.innerWidth <= 768 ? 3 : 6;
   }
 
   function showPage(page) {
