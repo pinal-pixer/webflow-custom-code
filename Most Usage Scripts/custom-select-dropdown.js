@@ -1,3 +1,13 @@
+/*
+Add this Attributes to your Html Structure
+
+[data-select="wrapper"] - Add this to Wrapper containing dropdown and input field
+[data-select="dropdown"] - Add this to dropdown
+[data-select="toggle"] - Add this to dropdown toggle
+[data-select="label"] - Add this to label you want replace when option is selected
+[data-select="input"] - Add this to hidden input field
+*/
+
 // Custom Select Dropdown
 $(document).ready(function () {
 
