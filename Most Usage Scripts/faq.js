@@ -1,4 +1,14 @@
-  //script for FAQ
+/*
+
+Add this Attributes to your Html Structure
+[faq-component="faq-wrapper"] - Add this to Wrapper containing all faqs
+[faq-component="faq-item"] - Add this to parent class of que/ans
+[faq-component="que-block"] - Add this to question block
+[faq-component="answer-block"] - Add this to answer block
+
+*/
+
+//script for FAQ
   $(function () {
     var Accordion = function (el, multiple) {
       this.el = el || {};
@@ -40,5 +50,3 @@
     .find('[faq-component="answer-block"]')
     .show();
 });
-
-
