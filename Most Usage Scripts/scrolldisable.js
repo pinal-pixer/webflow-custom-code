@@ -1,6 +1,6 @@
 /*
-Add this Attributes to your Html Structure
 
+Add this Attributes to your Html Structure
 [scroll-disable="smart-nav"] - Add this to Menu button of Navbar
 
 */
@@ -24,8 +24,8 @@ $(document).ready(function () {
 
 
 /*
-Add this Attributes to your Html Structure
 
+Add this Attributes to your Html Structure
 [scroll-disable="disable"] - Add this to button on which you want Scroll Enable
 [scroll-disable="enable"] - Add this to button on which you want Scroll Disable
 
@@ -49,13 +49,13 @@ $(document).ready(function () {
 });
 
 /*
+
 Add this Attributes to your Html Structure
-
 [scroll-disable] - Add this to button on which you want Scroll Disable on first click and enable again on second click
-
 
 */
 
+// Scroll Lock Toggle
 $(document).ready(function () {
 
   let scrollLocked = false;
